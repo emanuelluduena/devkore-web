@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DevKore — Software para negocios reales</title>
+<title>Mi Gestor — Sistema de gestión y punto de venta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -16,20 +16,25 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6}
 .mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 
 nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(6,10,9,.92);backdrop-filter:blur(8px);z-index:100}
-.logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.15rem;color:var(--text)}
-.logo::before{content:"> ";color:var(--cyan)}
+.logo{display:flex;align-items:center;gap:.6rem}
+.logo::before{content:none}
+.product-tag{color:var(--muted);font-size:.78rem;border-left:1px solid var(--border);padding-left:.6rem}
 .nav-cta{background:var(--wpp);color:#03150e;font-weight:700;font-size:.8rem;padding:.5rem 1.1rem;border-radius:2px;text-decoration:none}
 
 .hero{max-width:900px;margin:0 auto;padding:6rem 2rem 4rem;text-align:left}
 .tag{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:.8rem;letter-spacing:.05em;border:1px solid var(--cyan-dim);display:inline-block;padding:.3rem .7rem;border-radius:2px;margin-bottom:1.5rem}
 h1{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;letter-spacing:-.02em;margin-bottom:1.25rem}
 h1 .accent{color:var(--cyan)}
-.sub{color:var(--muted);font-size:1.1rem;max-width:560px;margin-bottom:2.5rem}
-.cta-row{display:flex;gap:1rem;flex-wrap:wrap}
+.sub{color:var(--muted);font-size:1.1rem;max-width:560px;margin-bottom:1.5rem}
+.cta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
 .btn-primary{background:var(--wpp);color:#03150e;font-weight:700;padding:.9rem 1.6rem;border-radius:2px;text-decoration:none;font-size:.95rem}
 .btn-ghost{border:1px solid var(--border);color:var(--text);padding:.9rem 1.6rem;border-radius:2px;text-decoration:none;font-size:.95rem;font-family:'JetBrains Mono',monospace}
+.trust-note{color:var(--muted);font-size:.85rem;font-family:'JetBrains Mono',monospace}
 
 /* showcase carousel */
 .showcase-wrap{max-width:900px;margin:0 auto;padding:1rem 2rem 5rem}
@@ -42,15 +47,44 @@ h1 .accent{color:var(--cyan)}
 .slide.active{position:relative;top:0;opacity:1}
 .slide-img{aspect-ratio:16/9;width:100%;background:radial-gradient(ellipse at 30% 20%,rgba(61,252,212,.08),transparent 60%),#0a0f0e;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .slide-img img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
-.mock-icon{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:2.4rem;color:var(--cyan);opacity:.85;z-index:1}
+.mock-icon{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.5rem;color:var(--cyan);opacity:.8;z-index:1;border:1.5px dashed var(--cyan-dim);padding:.7rem 1.3rem;border-radius:4px;letter-spacing:.05em}
 .slide-caption{padding:1.1rem 1.4rem;text-align:left;border-top:1px solid var(--border)}
 .slide-caption .lbl{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.03em;text-transform:uppercase;margin-bottom:.3rem}
 .slide-caption h3{font-size:1.05rem;margin-bottom:.35rem;font-weight:600}
 .slide-caption p{color:var(--muted);font-size:.88rem}
+.carousel-arrow{position:absolute;top:45%;transform:translateY(-50%);background:rgba(6,10,9,.75);border:1px solid var(--border);color:var(--cyan);width:36px;height:36px;border-radius:50%;font-size:1.4rem;line-height:1;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center}
+.carousel-arrow.left{left:12px}
+.carousel-arrow.right{right:12px}
+.carousel-arrow:hover{border-color:var(--cyan-dim)}
 .dots{display:flex;justify-content:center;gap:.5rem;margin-top:1.25rem}
 .pdot{width:8px;height:8px;border-radius:50%;background:var(--border);border:none;cursor:pointer;transition:background .2s,transform .2s}
 .pdot.active{background:var(--cyan);transform:scale(1.3)}
 
+/* antes / despues */
+section.split{max-width:900px;margin:0 auto;padding:1rem 2rem 5rem}
+section.split h2{font-family:'JetBrains Mono',monospace;font-size:1.4rem;margin-bottom:1.5rem}
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.split-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.5rem}
+.split-card .badge{font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.04em;padding:.3rem .7rem;border-radius:2px;display:inline-block;margin-bottom:1rem}
+.split-card.before .badge{color:#c98b5f;border:1px solid #6b4a34}
+.split-card.after .badge{color:var(--cyan);border:1px solid var(--cyan-dim)}
+.split-line{display:flex;gap:.6rem;padding:.5rem 0;font-size:.92rem;border-bottom:1px solid var(--border)}
+.split-line:last-child{border-bottom:none}
+.split-card.before .split-line{color:var(--muted)}
+.split-card.after .split-line .check{color:var(--cyan);font-weight:700}
+
+/* pricing */
+section.pricing{max-width:900px;margin:0 auto;padding:1rem 2rem 5rem}
+.price-box{max-width:420px;margin:0 auto;background:var(--surface);border:1px solid var(--cyan-dim);border-radius:8px;padding:2.4rem 2.2rem;text-align:center}
+.price-box .tagline{font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.05em;color:var(--cyan);margin-bottom:1rem;display:block}
+.price-box .amount{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:2.6rem;color:var(--text)}
+.price-box .amount sup{font-size:1rem;font-weight:500;vertical-align:top;margin-right:.15rem;color:var(--muted)}
+.price-box .per{color:var(--muted);font-size:.85rem;margin-bottom:1.6rem;display:block;font-family:'JetBrains Mono',monospace}
+.price-list{text-align:left;margin-bottom:1.8rem}
+.price-list .split-line{border-bottom:1px solid var(--border)}
+.price-box .btn-primary{width:100%;display:block;text-align:center}
+
+/* modulos */
 section#modulos{max-width:900px;margin:0 auto;padding:2rem 2rem 4rem}
 section#modulos h2{font-family:'JetBrains Mono',monospace;font-size:1.4rem;margin-bottom:1.5rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem}
@@ -59,30 +93,75 @@ section#modulos h2{font-family:'JetBrains Mono',monospace;font-size:1.4rem;margi
 .card h3{font-size:1.05rem;margin-bottom:.5rem}
 .card p{color:var(--muted);font-size:.9rem}
 
+/* faq */
+section.faq{max-width:760px;margin:0 auto;padding:1rem 2rem 5rem}
+section.faq h2{font-family:'JetBrains Mono',monospace;font-size:1.4rem;margin-bottom:1.5rem}
+.faq-item{border-bottom:1px solid var(--border);padding:1.1rem 0}
+.faq-item h3{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.faq-item p{color:var(--muted);font-size:.9rem}
+
 footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
 footer h2{font-family:'JetBrains Mono',monospace;font-size:1.3rem;margin-bottom:.6rem}
 footer p{color:var(--muted);margin-bottom:1.5rem}
+footer .footer-links{margin-top:1.8rem;font-size:.85rem;color:var(--muted)}
+footer .footer-links a{color:var(--text);text-decoration:none}
+footer .footer-links a:hover{color:var(--cyan)}
+footer .footer-links span{margin:0 .6rem;color:var(--border)}
+footer .footer-credit{margin-top:2rem;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+footer .foot-note{color:var(--muted);font-size:.75rem;font-family:'JetBrains Mono',monospace;opacity:.7}
+footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:center}
+
+@media (max-width:700px){
+  .split-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <nav>
-  <div class="logo">DevKore</div>
-  <a class="nav-cta" href="https://wa.me/5493XXXXXXXXX" target="_blank">Escribinos</a>
+  <div class="logo">
+    <svg width="130" height="26" viewBox="0 0 420 110"><text x="10" y="75" font-family="'JetBrains Mono', monospace" font-weight="700"><tspan font-size="52" fill="#d8f5ec">Dev</tspan><tspan font-size="60" fill="#3dfcd4">&lt;</tspan><tspan font-size="52" fill="#3dfcd4">Kore</tspan><tspan font-size="60" fill="#3dfcd4">&gt;</tspan></text></svg>
+    <span class="product-tag mono">Mi Gestor</span>
+  </div>
+  <a class="nav-cta" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20Mi%20Gestor%20para%20mi%20negocio" target="_blank">Pedir demo</a>
 </nav>
 
 <section class="hero">
-  <div class="tag mono">SOFTWARE A MEDIDA · CÓRDOBA, AR</div>
-  <h1>Sistemas de gestión que <span class="accent">corren</span> tu negocio, no al revés.</h1>
-  <p class="sub">Desarrollo software de punto de venta y gestión para comercios argentinos. Simple de usar, adaptado a cómo trabajás vos.</p>
+  <div class="tag mono">PUNTO DE VENTA Y GESTIÓN · PARA TU NEGOCIO</div>
+  <h1>El sistema que <span class="accent">controla</span> tu negocio, sin cuadernos ni planillas.</h1>
+  <p class="sub">Cobrá, controlá el stock y sabé cuánto ganás cada día. Mi Gestor funciona en la computadora, tablet o celular que ya tenés.</p>
   <div class="cta-row">
-    <a class="btn-primary" href="https://wa.me/5493XXXXXXXXX" target="_blank">Pedí una demo por WhatsApp</a>
+    <a class="btn-primary" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20Mi%20Gestor%20para%20mi%20negocio" target="_blank">Pedí una demo por WhatsApp</a>
     <a class="btn-ghost mono" href="#modulos">ver_modulos()</a>
   </div>
 </section>
 
+<section class="split">
+  <h2 class="mono">// el cambio real</h2>
+  <div class="split-grid">
+    <div class="split-card before">
+      <span class="badge mono">ANTES</span>
+      <div class="split-line">Anotar todo a mano en un cuaderno</div>
+      <div class="split-line">Sumar la caja al cerrar, a los ponchazos</div>
+      <div class="split-line">No saber qué producto está por faltar</div>
+      <div class="split-line">Fiados anotados en cualquier lado</div>
+      <div class="split-line">Perder tiempo controlando vencimientos a mano</div>
+      <div class="split-line">No saber cuánto vendió cada empleado</div>
+    </div>
+    <div class="split-card after">
+      <span class="badge mono">CON MI GESTOR</span>
+      <div class="split-line"><span class="check">✓</span> Cada venta registrada al toque</div>
+      <div class="split-line"><span class="check">✓</span> Total de caja exacto, todos los días</div>
+      <div class="split-line"><span class="check">✓</span> Alerta cuando un producto está por agotarse</div>
+      <div class="split-line"><span class="check">✓</span> Cuenta corriente de cada cliente, sin cuadernos</div>
+      <div class="split-line"><span class="check">✓</span> Aviso antes de que un producto venza</div>
+      <div class="split-line"><span class="check">✓</span> Reportes de ventas por vendedor</div>
+    </div>
+  </div>
+</section>
+
 <section class="showcase-wrap">
-  <h2 class="mono">// así se ve GestorPyme</h2>
-  <p class="lead">Capturas reales del sistema funcionando.</p>
+  <h2 class="mono">// así se ve Mi Gestor</h2>
+  <p class="lead">[Reemplazar cada slide-img por una captura real del sistema]</p>
 
   <div class="showcase" id="showcase">
     <div class="terminal-bar"><div class="dot-bar"></div><div class="dot-bar"></div><div class="dot-bar"></div></div>
@@ -91,26 +170,34 @@ footer p{color:var(--muted);margin-bottom:1.5rem}
       <div class="slide-caption">
         <div class="lbl">Punto de venta</div>
         <h3>Cobrá en segundos</h3>
-        <p>Facturación rápida, múltiples métodos de pago, todo desde una sola pantalla.</p>
+        <p>Cargá la venta y elegí el medio de pago, todo desde una sola pantalla.</p>
       </div>
     </div>
     <div class="slide" data-i="1">
       <div class="slide-img"><span class="mock-icon">STOCK</span></div>
       <div class="slide-caption">
-        <div class="lbl">Inventario</div>
-        <h3>Stock siempre actualizado</h3>
-        <p>Alertas automáticas cuando un producto está por agotarse.</p>
+        <div class="lbl">Stock</div>
+        <h3>Siempre actualizado</h3>
+        <p>El stock baja solo con cada venta. Alertas cuando un producto está por agotarse.</p>
       </div>
     </div>
     <div class="slide" data-i="2">
+      <div class="slide-img"><span class="mock-icon">CAJA</span></div>
+      <div class="slide-caption">
+        <div class="lbl">Caja diaria</div>
+        <h3>Sabé cuánto hay en caja</h3>
+        <p>Ventas, gastos y movimientos del día en un solo lugar, sin sumar a mano.</p>
+      </div>
+    </div>
+    <div class="slide" data-i="3">
       <div class="slide-img"><span class="mock-icon">$</span></div>
       <div class="slide-caption">
         <div class="lbl">Reportes</div>
         <h3>Tu negocio, de un vistazo</h3>
-        <p>Ventas y márgenes claros, sin armar planillas a mano.</p>
+        <p>Ventas y rentabilidad por vendedor, sin armar planillas a mano.</p>
       </div>
     </div>
-    <div class="slide" data-i="3">
+    <div class="slide" data-i="4">
       <div class="slide-img"><span class="mock-icon">⇄</span></div>
       <div class="slide-caption">
         <div class="lbl">Multi-sucursal</div>
@@ -118,24 +205,74 @@ footer p{color:var(--muted);margin-bottom:1.5rem}
         <p>Gestioná stock y ventas de cada sucursal desde el mismo lugar.</p>
       </div>
     </div>
+    <button class="carousel-arrow left" id="prevArrow" aria-label="Captura anterior" onclick="prevSlideManual()">&#8249;</button>
+    <button class="carousel-arrow right" id="nextArrow" aria-label="Siguiente captura" onclick="nextSlideManual()">&#8250;</button>
   </div>
   <div class="dots" id="dots"></div>
+</section>
+
+<section class="pricing">
+  <div class="price-box">
+    <span class="tagline mono">15 DÍAS DE PRUEBA GRATIS · SIN CONTRATOS LARGOS</span>
+    <span class="amount"><sup>$</sup>50.000</span>
+    <span class="per">/ mes · primer local</span>
+    <div class="price-list">
+      <div class="split-line"><span class="check" style="color:var(--cyan);font-weight:700">✓</span> Punto de venta y stock</div>
+      <div class="split-line"><span class="check" style="color:var(--cyan);font-weight:700">✓</span> Caja, gastos y proveedores</div>
+      <div class="split-line"><span class="check" style="color:var(--cyan);font-weight:700">✓</span> Funciona sin internet</div>
+      <div class="split-line"><span class="check" style="color:var(--cyan);font-weight:700">✓</span> Soporte por WhatsApp</div>
+      <div class="split-line"><span class="check" style="color:var(--cyan);font-weight:700">✓</span> ¿Más de un local? +$20.000/mes por cada local adicional</div>
+    </div>
+    <a class="btn-primary" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20contratar%20Mi%20Gestor" target="_blank">Empezar prueba gratis</a>
+    <p style="margin-top:1rem;color:var(--muted);font-size:.8rem;font-family:'JetBrains Mono',monospace">Pagando anual: $40.000/mes ($480.000/año)</p>
+  </div>
 </section>
 
 <section id="modulos">
   <h2 class="mono">// qué incluye</h2>
   <div class="grid">
-    <div class="card"><div class="n mono">01</div><h3>Punto de venta</h3><p>Facturación rápida, múltiples métodos de pago, caja diaria.</p></div>
+    <div class="card"><div class="n mono">01</div><h3>Punto de venta</h3><p>Cobrá rápido, con distintos medios de pago, desde el mostrador.</p></div>
     <div class="card"><div class="n mono">02</div><h3>Stock e inventario</h3><p>Control en tiempo real, alertas de bajo stock, proveedores.</p></div>
-    <div class="card"><div class="n mono">03</div><h3>Reportes</h3><p>Ventas, márgenes y rendimiento, sin planillas manuales.</p></div>
-    <div class="card"><div class="n mono">04</div><h3>Multi-sucursal</h3><p>Gestioná varios locales desde un mismo sistema.</p></div>
+    <div class="card"><div class="n mono">03</div><h3>Caja y gastos</h3><p>Sabé cuánto entra y sale cada día, sin planillas manuales.</p></div>
+    <div class="card"><div class="n mono">04</div><h3>Clientes y cuenta corriente</h3><p>Registrá a quién le fiás y llevá la cuenta al día, sin cuadernos.</p></div>
+    <div class="card"><div class="n mono">05</div><h3>Empleados</h3><p>Fichaje de horarios y nómina, todo desde el mismo sistema.</p></div>
+    <div class="card"><div class="n mono">06</div><h3>Reportes</h3><p>Ventas y rentabilidad por vendedor, sin armar planillas a mano.</p></div>
+    <div class="card"><div class="n mono">07</div><h3>Multi-sucursal</h3><p>Gestioná stock y ventas de todos tus locales desde un mismo panel.</p></div>
+    <div class="card"><div class="n mono">08</div><h3>Funciona sin internet</h3><p>Seguís vendiendo aunque se corte la conexión. Sincroniza solo al volver.</p></div>
+  </div>
+</section>
+
+<section class="faq">
+  <h2 class="mono">// preguntas frecuentes</h2>
+  <div class="faq-item">
+    <h3>¿Necesito instalar algo especial?</h3>
+    <p>No. Mi Gestor funciona en la computadora, tablet o celular que ya tenés, desde el navegador.</p>
+  </div>
+  <div class="faq-item">
+    <h3>¿Y si se corta el internet?</h3>
+    <p>Seguís vendiendo igual. El sistema guarda todo y sincroniza solo apenas vuelve la conexión.</p>
+  </div>
+  <div class="faq-item">
+    <h3>¿Puedo probarlo antes de decidir?</h3>
+    <p>Sí. Tenés 15 días de prueba gratis, sin tarjeta ni compromiso. Escribinos por WhatsApp para arrancar.</p>
   </div>
 </section>
 
 <footer>
   <h2 class="mono">¿Charlamos sobre tu negocio?</h2>
   <p>Te muestro el sistema funcionando, sin vueltas.</p>
-  <a class="btn-primary" href="https://wa.me/5493XXXXXXXXX" target="_blank">Escribime por WhatsApp</a>
+  <a class="btn-primary" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20Mi%20Gestor%20para%20mi%20negocio" target="_blank">Escribime por WhatsApp</a>
+  <div class="footer-links mono">
+    <a href="https://wa.me/5493515426971" target="_blank">WhatsApp</a>
+    <span>·</span>
+    <a href="mailto:emanuelluduena1@gmail.com">Email</a>
+    <span>·</span>
+    <a href="#">Términos de uso</a>
+  </div>
+  <div class="footer-credit">
+    <span class="foot-note">© 2026 Mi Gestor — www.migestor.com.ar</span>
+    <span class="foot-brand mono">un producto de <svg width="90" height="18" viewBox="0 0 420 110" style="vertical-align:middle;margin-left:4px"><text x="10" y="75" font-family="'JetBrains Mono', monospace" font-weight="700"><tspan font-size="52" fill="#8a9c96">Dev</tspan><tspan font-size="60" fill="#3dfcd4">&lt;</tspan><tspan font-size="52" fill="#3dfcd4">Kore</tspan><tspan font-size="60" fill="#3dfcd4">&gt;</tspan></text></svg></span>
+  </div>
 </footer>
 
 <script>
@@ -147,6 +284,7 @@ let timer;
 slides.forEach((_, i) => {
   const b = document.createElement('button');
   b.className = 'pdot' + (i === 0 ? ' active' : '');
+  b.setAttribute('aria-label', 'Ver captura ' + (i+1));
   b.addEventListener('click', () => goTo(i));
   dotsWrap.appendChild(b);
 });
@@ -161,7 +299,14 @@ function goTo(i) {
   resetTimer();
 }
 function next() { goTo((current + 1) % slides.length); }
-function resetTimer() { clearInterval(timer); timer = setInterval(next, 3500); }
+function nextSlideManual() { goTo((current + 1) % slides.length); }
+function prevSlideManual() { goTo((current - 1 + slides.length) % slides.length); }
+function resetTimer() {
+  clearInterval(timer);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    timer = setInterval(next, 3500);
+  }
+}
 resetTimer();
 </script>
 </body>
