@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Términos de uso — Mi Gestor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a09; --surface:#0c1412; --border:#1b2b27;
+  --cyan:#3dfcd4; --cyan-dim:#1e8f78; --text:#d8f5ec; --muted:#5f8579; --wpp:#25d366;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.65}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(6,10,9,.92);backdrop-filter:blur(8px);z-index:100}
+.logo{display:flex;align-items:center;gap:.6rem}
+.product-tag{color:var(--muted);font-size:.78rem;border-left:1px solid var(--border);padding-left:.6rem}
+.back-link{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:.5rem 1rem;border-radius:2px}
+.back-link:hover{color:var(--cyan);border-color:var(--cyan-dim)}
+
+main{max-width:760px;margin:0 auto;padding:4rem 2rem 5rem}
+.tag{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:.8rem;letter-spacing:.05em;border:1px solid var(--cyan-dim);display:inline-block;padding:.3rem .7rem;border-radius:2px;margin-bottom:1.25rem}
+h1{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(1.6rem,4vw,2.2rem);margin-bottom:.5rem;letter-spacing:-.01em}
+.updated{color:var(--muted);font-size:.85rem;font-family:'JetBrains Mono',monospace;margin-bottom:2.5rem}
+
+section.term{margin-bottom:2.2rem}
+section.term h2{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--cyan);margin-bottom:.7rem;display:flex;align-items:baseline;gap:.5rem}
+section.term h2 .n{color:var(--cyan-dim);font-size:.85rem}
+section.term p{color:var(--text);font-size:.95rem;margin-bottom:.7rem}
+section.term p:last-child{margin-bottom:0}
+section.term ul{color:var(--text);font-size:.95rem;margin:.5rem 0 .7rem 1.3rem}
+section.term li{margin-bottom:.4rem}
+.placeholder{color:#c98b5f;background:rgba(201,139,95,.08);padding:.05rem .35rem;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:.88em}
+
+footer{border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center}
+footer p{color:var(--muted);font-size:.85rem}
+footer a{color:var(--text);text-decoration:none}
+footer a:hover{color:var(--cyan)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <svg width="130" height="26" viewBox="0 0 420 110"><text x="10" y="75" font-family="'JetBrains Mono', monospace" font-weight="700"><tspan font-size="52" fill="#d8f5ec">Dev</tspan><tspan font-size="60" fill="#3dfcd4">&lt;</tspan><tspan font-size="52" fill="#3dfcd4">Kore</tspan><tspan font-size="60" fill="#3dfcd4">&gt;</tspan></text></svg>
+    <span class="product-tag mono">Mi Gestor</span>
+  </div>
+  <a class="back-link" href="index.html">&larr; volver</a>
+</nav>
+
+<main>
+  <div class="tag mono">TÉRMINOS Y CONDICIONES</div>
+  <h1>Términos de uso de Mi Gestor</h1>
+  <p class="updated mono">Última actualización: <span class="placeholder">[FECHA_ACTUALIZACIÓN]</span></p>
+
+  <section class="term">
+    <h2><span class="n mono">01</span> Quiénes somos</h2>
+    <p>Mi Gestor es un servicio de software como servicio (SaaS) de gestión y punto de venta, provisto por <span class="placeholder">[RAZÓN_SOCIAL]</span>, CUIT <span class="placeholder">[CUIT]</span>, con domicilio en <span class="placeholder">[DOMICILIO_LEGAL]</span> ("Mi Gestor", "nosotros"). Estos Términos de uso regulan el acceso y uso del servicio por parte de cualquier persona o negocio que se registre ("el usuario", "vos").</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">02</span> Aceptación de los términos</h2>
+    <p>Al crear una cuenta, iniciar la prueba gratuita o contratar un plan pago, aceptás estos Términos de uso en su totalidad. Si no estás de acuerdo, no debés utilizar el servicio.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">03</span> Descripción del servicio</h2>
+    <p>Mi Gestor ofrece funcionalidades de punto de venta, control de stock, caja, clientes, reportes y módulos adicionales según el plan contratado. El servicio funciona desde el navegador y permite continuar operando sin conexión a internet, sincronizando los datos automáticamente al restablecerse la conexión.</p>
+    <p>Nos reservamos el derecho de agregar, modificar o discontinuar funcionalidades del servicio, notificando los cambios relevantes con una antelación razonable cuando sea posible.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">04</span> Prueba gratuita</h2>
+    <p>Los nuevos usuarios acceden a 15 días de prueba gratuita, sin necesidad de tarjeta de crédito. Finalizado ese período, el acceso al sistema se suspende hasta que se contrate un plan pago. Los datos cargados durante la prueba se conservan por <span class="placeholder">[PLAZO_CONSERVACIÓN_DATOS_TRIAL]</span> antes de ser eliminados si no se activa una suscripción.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">05</span> Planes, precios y facturación</h2>
+    <ul>
+      <li>Plan mensual: $50.000/mes por el primer local, más $20.000/mes por cada local adicional.</li>
+      <li>Plan anual: $40.000/mes ($480.000/año), facturado de forma anual.</li>
+      <li>Los precios pueden actualizarse periódicamente. Los cambios de precio no afectan retroactivamente a períodos ya facturados y se comunican con antelación a los usuarios activos.</li>
+      <li>El pago se realiza a través de <span class="placeholder">[MEDIO_DE_PAGO]</span>.</li>
+    </ul>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">06</span> Cancelación y baja</h2>
+    <p>Podés cancelar tu suscripción en cualquier momento escribiendo a <a href="mailto:emanuelluduena1@gmail.com">emanuelluduena1@gmail.com</a> o por WhatsApp. La baja tiene efecto al finalizar el período ya pagado; no se realizan reintegros de períodos parciales, salvo que la normativa vigente indique lo contrario.</p>
+    <p>Ante la baja, tenés derecho a exportar tus datos en formato CSV dentro de los <span class="placeholder">[PLAZO_EXPORT_DATOS]</span> posteriores a la cancelación.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">07</span> Obligaciones del usuario</h2>
+    <ul>
+      <li>Utilizar el servicio conforme a la ley y a estos términos.</li>
+      <li>Mantener la confidencialidad de sus credenciales de acceso.</li>
+      <li>Ser responsable de la veracidad de los datos cargados en el sistema (productos, precios, clientes, empleados, etc.).</li>
+      <li>No intentar vulnerar la seguridad del servicio ni acceder a datos de otros usuarios.</li>
+    </ul>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">08</span> Propiedad intelectual</h2>
+    <p>El software, diseño, marca y demás elementos de Mi Gestor son propiedad de <span class="placeholder">[RAZÓN_SOCIAL]</span>. La contratación del servicio otorga una licencia de uso no exclusiva e intransferible, no una transferencia de propiedad. Los datos que el usuario carga en el sistema (productos, ventas, clientes) siguen siendo de su propiedad.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">09</span> Disponibilidad y soporte</h2>
+    <p>Hacemos nuestro mejor esfuerzo para mantener el servicio disponible de forma continua, sin poder garantizar una disponibilidad del 100%. Pueden existir interrupciones programadas para mantenimiento, que se comunicarán cuando sea posible. El soporte se brinda por WhatsApp al <span class="mono">+54 9 351 542-6971</span>.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">10</span> Limitación de responsabilidad</h2>
+    <p>Mi Gestor no se responsabiliza por pérdidas de ingresos, de datos o daños indirectos derivados del uso o la imposibilidad de uso del servicio, salvo en los casos en que la ley no permita limitar dicha responsabilidad. Recomendamos al usuario conservar sus propios respaldos de la información crítica de su negocio.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">11</span> Protección de datos personales</h2>
+    <p>Los datos personales que se recaben (del usuario y de sus clientes cargados en el sistema) se tratan conforme a la Ley 25.326 de Protección de Datos Personales. El titular de los datos tiene derecho de acceso, rectificación y supresión, que puede ejercer escribiendo a <a href="mailto:emanuelluduena1@gmail.com">emanuelluduena1@gmail.com</a>. La Agencia de Acceso a la Información Pública, en su carácter de Órgano de Control de la Ley 25.326, tiene la atribución de atender denuncias y reclamos que interpongan quienes resulten afectados en sus derechos.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">12</span> Modificaciones a estos términos</h2>
+    <p>Podemos actualizar estos Términos de uso periódicamente. Los cambios relevantes se notificarán por email o dentro del sistema con una antelación razonable. El uso continuado del servicio luego de una actualización implica la aceptación de los nuevos términos.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">13</span> Legislación aplicable y jurisdicción</h2>
+    <p>Estos términos se rigen por las leyes de la República Argentina. Ante cualquier controversia, las partes se someten a la competencia de los tribunales ordinarios de <span class="placeholder">[JURISDICCIÓN]</span>, renunciando a cualquier otro fuero que pudiera corresponder.</p>
+  </section>
+
+  <section class="term">
+    <h2><span class="n mono">14</span> Contacto</h2>
+    <p>Para consultas sobre estos términos: <a href="mailto:emanuelluduena1@gmail.com">emanuelluduena1@gmail.com</a> o por WhatsApp al <span class="mono">+54 9 351 542-6971</span>.</p>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 Mi Gestor — www.migestor.com.ar</p>
+</footer>
+</body>
+</html>
