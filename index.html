@@ -115,14 +115,16 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
   .split-grid{grid-template-columns:1fr}
 }
 </style>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
 <nav>
   <div class="logo">
-    <svg width="130" height="26" viewBox="0 0 420 110"><text x="10" y="75" font-family="'JetBrains Mono', monospace" font-weight="700"><tspan font-size="52" fill="#d8f5ec">Dev</tspan><tspan font-size="60" fill="#3dfcd4">&lt;</tspan><tspan font-size="52" fill="#3dfcd4">Kore</tspan><tspan font-size="60" fill="#3dfcd4">&gt;</tspan></text></svg>
-    <span class="product-tag mono">Mi Gestor</span>
-  </div>
-  <a class="nav-cta" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20Mi%20Gestor%20para%20mi%20negocio" target="_blank">Pedir demo</a>
+    <svg width="300" height="56" viewBox="0 0 420 110"><text x="10" y="75" font-family="'JetBrains Mono', monospace" font-weight="700"><tspan font-size="52" fill="#d8f5ec">Dev</tspan><tspan font-size="60" fill="#3dfcd4">&lt;</tspan><tspan font-size="52" fill="#3dfcd4">Kore</tspan><tspan font-size="60" fill="#3dfcd4">&gt;</tspan></text></svg>
+<span class="product-tag mono" style="font-size:1rem">Mi Gestor</span>  </div>
+  <a class="nav-cta" href="registro.html">Probar 15 días gratis</a>
 </nav>
 
 <section class="hero">
@@ -130,8 +132,8 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
   <h1>El sistema que <span class="accent">controla</span> tu negocio, sin cuadernos ni planillas.</h1>
   <p class="sub">Cobrá, controlá el stock y sabé cuánto ganás cada día. Mi Gestor funciona en la computadora, tablet o celular que ya tenés.</p>
   <div class="cta-row">
-    <a class="btn-primary" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20Mi%20Gestor%20para%20mi%20negocio" target="_blank">Pedí una demo por WhatsApp</a>
-    <a class="btn-ghost mono" href="#modulos">ver_modulos()</a>
+    <a class="btn-primary" href="https://www.migestor.com.ar/?demo=1" target="_blank">Probar demo ahora →</a>
+    <a class="btn-ghost mono" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20Mi%20Gestor%20para%20mi%20negocio" target="_blank">Hablar por WhatsApp</a>
   </div>
 </section>
 
@@ -161,12 +163,12 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
 
 <section class="showcase-wrap">
   <h2 class="mono">// así se ve Mi Gestor</h2>
-  <p class="lead">[Reemplazar cada slide-img por una captura real del sistema]</p>
+  <p class="lead">Así se ve Mi Gestor por dentro, funcionando de verdad.</p>
 
-  <div class="showcase" id="showcase">
+ <div class="showcase" id="showcase">
     <div class="terminal-bar"><div class="dot-bar"></div><div class="dot-bar"></div><div class="dot-bar"></div></div>
     <div class="slide active" data-i="0">
-      <div class="slide-img"><span class="mock-icon">POS</span></div>
+      <div class="slide-img"><img src="capturas/captura-pos.png" alt="Punto de venta de Mi Gestor"></div>
       <div class="slide-caption">
         <div class="lbl">Punto de venta</div>
         <h3>Cobrá en segundos</h3>
@@ -174,7 +176,7 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
       </div>
     </div>
     <div class="slide" data-i="1">
-      <div class="slide-img"><span class="mock-icon">STOCK</span></div>
+      <div class="slide-img"><img src="capturas/captura-stock.png" alt="Control de stock de Mi Gestor"></div>
       <div class="slide-caption">
         <div class="lbl">Stock</div>
         <h3>Siempre actualizado</h3>
@@ -182,7 +184,7 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
       </div>
     </div>
     <div class="slide" data-i="2">
-      <div class="slide-img"><span class="mock-icon">CAJA</span></div>
+      <div class="slide-img"><img src="capturas/captura-caja.png" alt="Caja diaria de Mi Gestor"></div>
       <div class="slide-caption">
         <div class="lbl">Caja diaria</div>
         <h3>Sabé cuánto hay en caja</h3>
@@ -190,19 +192,11 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
       </div>
     </div>
     <div class="slide" data-i="3">
-      <div class="slide-img"><span class="mock-icon">$</span></div>
+      <div class="slide-img"><img src="capturas/captura-reportes.png" alt="Reportes y estadísticas de Mi Gestor"></div>
       <div class="slide-caption">
         <div class="lbl">Reportes</div>
         <h3>Tu negocio, de un vistazo</h3>
         <p>Ventas y rentabilidad por vendedor, sin armar planillas a mano.</p>
-      </div>
-    </div>
-    <div class="slide" data-i="4">
-      <div class="slide-img"><span class="mock-icon">⇄</span></div>
-      <div class="slide-caption">
-        <div class="lbl">Multi-sucursal</div>
-        <h3>Todos tus locales, un solo panel</h3>
-        <p>Gestioná stock y ventas de cada sucursal desde el mismo lugar.</p>
       </div>
     </div>
     <button class="carousel-arrow left" id="prevArrow" aria-label="Captura anterior" onclick="prevSlideManual()">&#8249;</button>
@@ -267,7 +261,7 @@ footer .foot-brand{color:var(--muted);font-size:.75rem;display:flex;align-items:
     <span>·</span>
     <a href="mailto:emanuelluduena1@gmail.com">Email</a>
     <span>·</span>
-    <a href="#">Términos de uso</a>
+    <a href="terminos.html">Términos de uso</a>
   </div>
   <div class="footer-credit">
     <span class="foot-note">© 2026 Mi Gestor — www.migestor.com.ar</span>

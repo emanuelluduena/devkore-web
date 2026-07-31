@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Probá Mi Gestor 15 días gratis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a09; --surface:#0c1412; --border:#1b2b27;
+  --cyan:#3dfcd4; --cyan-dim:#1e8f78; --text:#d8f5ec; --muted:#5f8579; --wpp:#25d366;
+  --err:#e05252; --err-dim:#6b2f2f;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6;min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(6,10,9,.92);backdrop-filter:blur(8px);z-index:100}
+.logo{display:flex;align-items:center;gap:.6rem}
+.product-tag{color:var(--muted);font-size:.78rem;border-left:1px solid var(--border);padding-left:.6rem}
+.nav-back{color:var(--muted);font-size:.85rem;text-decoration:none;font-family:'JetBrains Mono',monospace}
+.nav-back:hover{color:var(--cyan)}
+
+.wrap{max-width:520px;margin:0 auto;padding:4rem 2rem 5rem}
+.tag{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:.8rem;letter-spacing:.05em;border:1px solid var(--cyan-dim);display:inline-block;padding:.3rem .7rem;border-radius:2px;margin-bottom:1.5rem}
+h1{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.2;letter-spacing:-.02em;margin-bottom:1rem}
+h1 .accent{color:var(--cyan)}
+.sub{color:var(--muted);font-size:1rem;margin-bottom:2rem}
+
+.field{margin-bottom:1.2rem}
+.field label{display:block;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);margin-bottom:.4rem;letter-spacing:.02em}
+.field input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:.8rem .9rem;border-radius:4px;font-size:.95rem;font-family:'Inter',sans-serif}
+.field input:focus{border-color:var(--cyan-dim)}
+.field .hint{color:var(--muted);font-size:.78rem;margin-top:.35rem}
+.field.error input{border-color:var(--err)}
+.field.error .hint{color:var(--err)}
+
+.btn-primary{background:var(--wpp);color:#03150e;font-weight:700;padding:.9rem 1.6rem;border-radius:2px;text-decoration:none;font-size:.95rem;border:none;width:100%;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-primary:disabled{opacity:.6;cursor:default}
+.btn-ghost{border:1px solid var(--border);color:var(--text);padding:.9rem 1.6rem;border-radius:2px;text-decoration:none;font-size:.95rem;font-family:'JetBrains Mono',monospace;display:block;text-align:center;width:100%}
+
+.alert-box{background:rgba(224,82,82,.08);border:1px solid var(--err-dim);color:#f0a8a8;padding:.8rem 1rem;border-radius:4px;font-size:.85rem;margin-bottom:1.2rem;display:none}
+.alert-box.show{display:block}
+
+.result-box{background:var(--surface);border:1px solid var(--cyan-dim);border-radius:8px;padding:2rem;text-align:center}
+.result-box .tagline{font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.05em;color:var(--cyan);display:block;margin-bottom:1rem}
+.cred-row{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.8rem 1rem;margin-bottom:.7rem;font-family:'JetBrains Mono',monospace}
+.cred-row .lbl{color:var(--muted);font-size:.8rem}
+.cred-row .val{color:var(--text);font-weight:700}
+.result-box p.note{color:var(--muted);font-size:.85rem;margin:1.2rem 0 1.6rem}
+</style>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <svg width="220" height="41" viewBox="0 0 420 110"><text x="10" y="75" font-family="'JetBrains Mono', monospace" font-weight="700"><tspan font-size="52" fill="#d8f5ec">Dev</tspan><tspan font-size="60" fill="#3dfcd4">&lt;</tspan><tspan font-size="52" fill="#3dfcd4">Kore</tspan><tspan font-size="60" fill="#3dfcd4">&gt;</tspan></text></svg>
+    <span class="product-tag mono">Mi Gestor</span>
+  </div>
+  <a class="nav-back" href="index.html">← volver</a>
+</nav>
+
+<div class="wrap">
+
+  <div id="vista-form">
+    <div class="tag mono">PRUEBA GRATUITA · 15 DÍAS</div>
+    <h1>Empezá a usar <span class="accent">Mi Gestor</span> gratis.</h1>
+    <p class="sub">Completá tus datos y armamos tu cuenta al instante. Sin tarjeta de crédito. Podés cancelar cuando quieras.</p>
+
+    <div id="alert-general" class="alert-box"></div>
+
+    <form id="form-registro" novalidate>
+      <div class="field" id="f-negocio">
+        <label for="negocio">Nombre de tu negocio</label>
+        <input type="text" id="negocio" placeholder="Ej: Almacén Don José" autocomplete="organization" />
+      </div>
+      <div class="field" id="f-nombre">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" placeholder="Ej: José Rodríguez" autocomplete="name" />
+      </div>
+      <div class="field" id="f-email">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="tu@email.com" autocomplete="email" />
+      </div>
+      <div class="field" id="f-telefono">
+        <label for="telefono">WhatsApp / Teléfono</label>
+        <input type="tel" id="telefono" placeholder="Ej: 11 5555-5555" autocomplete="tel" />
+      </div>
+      <div class="field" id="f-username">
+        <label for="username">Elegí un usuario</label>
+        <input type="text" id="username" class="mono" placeholder="sin espacios, ej: joserodriguez" autocomplete="off" />
+        <div class="hint">Tiene que ser único en todo el sistema.</div>
+      </div>
+      <div class="field" id="f-password">
+        <label for="password">Elegí una contraseña</label>
+        <input type="password" id="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit">Crear mi cuenta</button>
+    </form>
+  </div>
+
+  <div id="vista-exito" style="display:none">
+    <div class="result-box">
+      <span class="tagline mono">¡LISTO!</span>
+      <h1 style="font-size:1.5rem">Tu cuenta ya está creada</h1>
+      <p class="note">Guardá estos datos, los vas a necesitar para entrar. Tenés <strong id="dias-trial">15</strong> días de prueba gratis a partir de hoy.</p>
+      <div class="cred-row"><span class="lbl mono">Usuario</span><span class="val mono" id="cred-usr"></span></div>
+      <div class="cred-row"><span class="lbl mono">Contraseña</span><span class="val mono" id="cred-pass"></span></div>
+      <p class="note">Entrá con estos datos en <strong>www.migestor.com.ar</strong> cuando quieras.</p>
+      <a class="btn-ghost mono" href="https://www.migestor.com.ar" target="_blank">ir_a_migestor()</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SB_URL = "https://yabschiaphpiozajnwxx.supabase.co";
+const SB_KEY = "sb_publishable_BZlDsQFy_PFTx-01ZYt7rg_FN4IqLB5";
+
+async function sbGet(table, params='') {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbPost(table, body) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json', 'Prefer': 'return=representation'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbRpc(fn, params={}) {
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  const texto = await r.text();
+  return texto ? JSON.parse(texto) : null;
+}
+
+function mostrarAlerta(msg) {
+  const box = document.getElementById('alert-general');
+  box.textContent = msg;
+  box.classList.add('show');
+}
+function ocultarAlerta() {
+  document.getElementById('alert-general').classList.remove('show');
+}
+function marcarError(id, mensaje) {
+  const field = document.getElementById('f-' + id);
+  field.classList.add('error');
+  if (mensaje) {
+    field.querySelector('.hint-error')?.remove();
+    field.insertAdjacentHTML('beforeend', `<div class="hint hint-error">${mensaje}</div>`);
+  }
+}
+function limpiarErrores() {
+  document.querySelectorAll('.field.error').forEach(f => f.classList.remove('error'));
+  document.querySelectorAll('.hint-error').forEach(h => h.remove());
+}
+
+document.getElementById('form-registro').addEventListener('submit', async function(ev) {
+  ev.preventDefault();
+  ocultarAlerta();
+  limpiarErrores();
+
+  const negocio = document.getElementById('negocio').value.trim();
+  const nombre = document.getElementById('nombre').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+  const username = document.getElementById('username').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+
+  let hayError = false;
+  if (!negocio) { marcarError('negocio', 'Falta el nombre del negocio'); hayError = true; }
+  if (!nombre) { marcarError('nombre', 'Falta tu nombre'); hayError = true; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { marcarError('email', 'Email inválido'); hayError = true; }
+  if (!telefono) { marcarError('telefono', 'Falta tu teléfono'); hayError = true; }
+  if (!username || /\s/.test(username)) { marcarError('username', 'Sin espacios, elegí otro'); hayError = true; }
+  if (!password || password.length < 6) { marcarError('password', 'Mínimo 6 caracteres'); hayError = true; }
+  if (hayError) return;
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Creando tu cuenta...';
+
+  try {
+    // 1) Verificar que el username no esté tomado (es único a nivel global)
+    const existentes = await sbGet('usuarios', `username=eq.${encodeURIComponent(username)}&select=id`);
+    if (existentes.length) {
+      marcarError('username', 'Ese usuario ya está en uso, probá con otro');
+      btn.disabled = false;
+      btn.textContent = 'Crear mi cuenta';
+      return;
+    }
+
+    // 2) Crear el negocio, marcado como trial con vencimiento a 15 días
+    const hoy = new Date();
+    const vencimiento = new Date(hoy);
+    vencimiento.setDate(vencimiento.getDate() + 15);
+    const vencimientoStr = vencimiento.toISOString().slice(0, 10);
+
+    const negRes = await sbPost('negocios', {
+      nombre: negocio, email: email, telefono: telefono,
+      contacto_nombre: nombre, es_trial: true, trial_vencimiento: vencimientoStr
+    });
+    const negocioId = negRes[0].id;
+
+    // 3) Crear el usuario Administrador
+    const usrRes = await sbPost('usuarios', {
+      negocio_id: negocioId, nombre: nombre, username: username,
+      password_hash: 'temporal', rol: 'Administrador', activo: true
+    });
+    const usuarioId = usrRes[0].id;
+
+    // 4) Fijar la contraseña real (hasheada) vía la misma función que usa el sistema
+    await sbRpc('set_password_usuario', { p_user_id: usuarioId, p_password: password });
+
+    // 5) Mostrar credenciales
+    document.getElementById('cred-usr').textContent = username;
+    document.getElementById('cred-pass').textContent = password;
+    document.getElementById('vista-form').style.display = 'none';
+    document.getElementById('vista-exito').style.display = 'block';
+
+  } catch (e) {
+    console.error('Error en registro:', e);
+    mostrarAlerta('No pudimos crear tu cuenta. Verificá tu conexión e intentá de nuevo, o escribinos por WhatsApp.');
+    btn.disabled = false;
+    btn.textContent = 'Crear mi cuenta';
+  }
+});
+</script>
+</body>
+</html>
