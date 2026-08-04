@@ -205,38 +205,29 @@ document.getElementById('form-registro').addEventListener('submit', async functi
   btn.textContent = 'Creando tu cuenta...';
 
   try {
-    // 1) Verificar que el username no esté tomado (es único a nivel global)
-    const existentes = await sbGet('usuarios', `username=eq.${encodeURIComponent(username)}&select=id`);
-    if (existentes.length) {
-      marcarError('username', 'Ese usuario ya está en uso, probá con otro');
+    // Todo el alta (chequeo de usuario repetido, creación del negocio, creación del
+    // usuario administrador, y fijar la contraseña) ahora lo hace la Edge Function
+    // "registro", del lado del servidor, con la clave privada. El navegador ya no
+    // toca las tablas "negocios" ni "usuarios" directamente.
+    const resp = await fetch(`${SB_URL}/functions/v1/registro`, {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ negocio, nombre, email, telefono, username, password })
+    });
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      if (data.error && data.error.toLowerCase().includes('usuario')) {
+        marcarError('username', data.error);
+      } else {
+        mostrarAlerta(data.error || 'No pudimos crear tu cuenta. Probá de nuevo.');
+      }
       btn.disabled = false;
       btn.textContent = 'Crear mi cuenta';
       return;
     }
 
-    // 2) Crear el negocio, marcado como trial con vencimiento a 15 días
-    const hoy = new Date();
-    const vencimiento = new Date(hoy);
-    vencimiento.setDate(vencimiento.getDate() + 15);
-    const vencimientoStr = vencimiento.toISOString().slice(0, 10);
-
-    const negRes = await sbPost('negocios', {
-      nombre: negocio, email: email, telefono: telefono,
-      contacto_nombre: nombre, es_trial: true, trial_vencimiento: vencimientoStr
-    });
-    const negocioId = negRes[0].id;
-
-    // 3) Crear el usuario Administrador
-    const usrRes = await sbPost('usuarios', {
-      negocio_id: negocioId, nombre: nombre, username: username,
-      password_hash: 'temporal', rol: 'Administrador', activo: true
-    });
-    const usuarioId = usrRes[0].id;
-
-    // 4) Fijar la contraseña real (hasheada) vía la misma función que usa el sistema
-    await sbRpc('set_password_usuario', { p_user_id: usuarioId, p_password: password });
-
-    // 5) Mostrar credenciales
+    // Mostrar credenciales
     document.getElementById('cred-usr').textContent = username;
     document.getElementById('cred-pass').textContent = password;
     document.getElementById('vista-form').style.display = 'none';
