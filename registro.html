@@ -190,6 +190,9 @@ document.getElementById('form-registro').addEventListener('submit', async functi
   const telefono = document.getElementById('telefono').value.trim();
   const username = document.getElementById('username').value.trim().toLowerCase();
   const password = document.getElementById('password').value;
+  // De donde vino este visitante (ej: ?origen=instagram en el link que se comparte).
+  // Si no viene en la URL, se guarda como 'organico'.
+  const origen = new URLSearchParams(window.location.search).get('origen') || 'organico';
 
   let hayError = false;
   if (!negocio) { marcarError('negocio', 'Falta el nombre del negocio'); hayError = true; }
@@ -212,7 +215,7 @@ document.getElementById('form-registro').addEventListener('submit', async functi
     const resp = await fetch(`${SB_URL}/functions/v1/registro`, {
       method: 'POST',
       headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ negocio, nombre, email, telefono, username, password })
+      body: JSON.stringify({ negocio, nombre, email, telefono, username, password, origen })
     });
     const data = await resp.json();
 
