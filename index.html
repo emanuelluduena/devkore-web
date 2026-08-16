@@ -302,6 +302,19 @@ function resetTimer() {
   }
 }
 resetTimer();
+
+// Si alguien llega a esta pagina con ?origen=instagram (u otro), se lo pegamos
+// al boton de "Probar 15 dias gratis" para que no se pierda el dato cuando
+// pasa por la home antes de llegar al formulario de registro.
+(function() {
+  const origen = new URLSearchParams(window.location.search).get('origen');
+  if (!origen) return;
+  document.querySelectorAll('a[href^="registro.html"]').forEach(function(a) {
+    const url = new URL(a.getAttribute('href'), window.location.href);
+    url.searchParams.set('origen', origen);
+    a.setAttribute('href', url.pathname + url.search);
+  });
+})();
 </script>
 </body>
 </html>
