@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>WhatsApp Sabores</title>
+<style>
+:root{
+  --bg:#0b141a; --panel:#111b21; --panel-2:#1f2c34;
+  --texto:#e9edef; --texto-sec:#8696a0; --borde:#2a3942;
+  --wa:#00a884; --wa-2:#008069; --wa-bg:#0b3d31;
+  --err:#ff8a80;
+  --radio:14px; --radio-sm:10px;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--texto);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding-inline:14px;}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 60px;}
+header{margin-bottom:14px;}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--wa);margin-bottom:4px;}
+h1{font-size:19px;font-weight:700;margin:0 0 4px;}
+.sub{color:var(--texto-sec);font-size:13px;line-height:1.5;max-width:56ch;}
+
+.login{background:var(--panel);border:1px solid var(--borde);border-radius:var(--radio);padding:18px 16px;margin-top:24px;}
+.login label{display:block;font-size:13px;font-weight:700;margin-bottom:8px;}
+.login input{width:100%;border:1px solid var(--borde);border-radius:var(--radio-sm);padding:12px;font-size:15px;background:var(--panel-2);color:var(--texto);outline:none;font-family:inherit;}
+.login input:focus{border-color:var(--wa);}
+.login button{margin-top:10px;width:100%;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;background:var(--wa);color:#04140f;cursor:pointer;font-family:inherit;}
+.err{color:var(--err);font-size:13px;margin-top:10px;}
+
+.buscador{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--borde);border-radius:var(--radio);padding:11px 14px;margin:14px 0 10px;}
+.buscador input{border:none;background:none;outline:none;font-size:14.5px;flex:1;color:var(--texto);font-family:inherit;}
+.buscador input::placeholder{color:var(--texto-sec);}
+
+.tabs{display:flex;gap:6px;background:var(--panel);border-radius:20px;padding:4px;margin-bottom:14px;overflow-x:auto;}
+.tabs button{flex:1;white-space:nowrap;border:none;background:none;color:var(--texto-sec);font-size:13px;font-weight:600;padding:9px 10px;border-radius:16px;cursor:pointer;font-family:inherit;}
+.tabs button.activo{background:var(--wa);color:#04140f;}
+
+.panel-msg{background:var(--panel);border:1px solid var(--borde);border-radius:var(--radio);padding:14px 16px;margin-bottom:16px;}
+.panel-msg h2{font-size:13px;font-weight:700;margin:0 0 6px;}
+.panel-msg p.hint{font-size:11.5px;color:var(--texto-sec);margin:0 0 10px;line-height:1.5;}
+textarea{width:100%;min-height:70px;resize:vertical;border:1px solid var(--borde);border-radius:var(--radio-sm);padding:10px 12px;font-family:inherit;font-size:13.5px;background:var(--panel-2);color:var(--texto);outline:none;}
+textarea:focus{border-color:var(--wa);}
+code{background:var(--wa-bg);color:var(--wa);padding:1px 5px;border-radius:4px;font-size:12px;}
+
+.lista{display:flex;flex-direction:column;gap:10px;}
+.card{background:var(--panel);border:1px solid var(--borde);border-radius:var(--radio);padding:14px 16px;}
+.card .nombre{font-size:15px;font-weight:700;margin:0 0 3px;}
+.card .meta{font-size:12.5px;color:var(--texto-sec);margin:0 0 2px;}
+.card .tel{font-size:12.5px;color:var(--texto-sec);font-variant-numeric:tabular-nums;margin:0 0 4px;}
+.card .estado{font-size:11.5px;color:var(--wa);margin:0 0 10px;}
+.card .acciones{display:flex;gap:8px;margin-top:10px;}
+.btn{flex:1;text-align:center;border-radius:8px;padding:10px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;border:1px solid transparent;}
+.btn-wa{background:var(--wa);color:#04140f;}
+.btn-wa:active{background:var(--wa-2);}
+.btn-ghost{background:transparent;color:var(--texto-sec);border-color:var(--borde);}
+.btn-off{background:var(--panel-2);color:var(--texto-sec);border-color:var(--borde);cursor:default;}
+.pts{font-variant-numeric:tabular-nums;color:var(--wa);font-weight:700;}
+.vacio{text-align:center;padding:40px 16px;color:var(--texto-sec);font-size:13.5px;}
+footer{margin-top:20px;font-size:11px;color:var(--texto-sec);text-align:center;}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Almacén Natural Sabores de la Tierra · Fidelización</div>
+    <h1>Envíos de WhatsApp a clientes</h1>
+    <p class="sub" id="sub">Ingresá la clave para ver la lista de clientes.</p>
+  </header>
+
+  <form class="login" id="login">
+    <label for="clave">Clave de acceso</label>
+    <input id="clave" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Entrar</button>
+    <div class="err hidden" id="err"></div>
+  </form>
+
+  <div id="app" class="hidden">
+    <div class="buscador">🔎<input id="buscar" placeholder="Buscar por nombre..."></div>
+
+    <div class="tabs" id="tabs">
+      <button class="activo" data-f="pendientes">Pendientes <span id="n-pendientes">0</span></button>
+      <button data-f="enviados">Enviados <span id="n-enviados">0</span></button>
+      <button data-f="sin">Sin teléfono <span id="n-sin">0</span></button>
+      <button data-f="todos">Todos <span id="n-todos">0</span></button>
+    </div>
+
+    <div class="panel-msg">
+      <h2>Mensaje</h2>
+      <p class="hint">Se abre precargado al tocar "Abrir WhatsApp" y el cliente pasa solo a "Enviados". Usá <code>{{nombre}}</code> y <code>{{puntos}}</code>.</p>
+      <textarea id="mensaje">¡Hola {{nombre}}! Te contamos que estamos acercando cada vez más nuestro local a vos. Recordá que con nosotros seguís sumando puntos y ya tenés {{puntos}} puntos — podés canjearlos cuando quieras. Además ahora podés pedir por nuestra web: www.saboresdelatierradiet.com.ar, hacés el pedido y te lo llevamos dentro de las 72 hs hábiles. Y por ser cliente fidelizado tenés un 10% de descuento comprando desde la web. Te esperamos 🌿</textarea>
+    </div>
+
+    <div class="lista" id="lista"></div>
+    <div id="vacio" class="vacio hidden">No hay clientes en esta lista.</div>
+    <footer>Números en formato WhatsApp Argentina (54 9 + código de área + número).</footer>
+  </div>
+</div>
+
+<script>
+const SB_URL = "https://yabschiaphpiozajnwxx.supabase.co";
+const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhYnNjaGlhcGhwaW96YWpud3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODEzMjgsImV4cCI6MjA5NzY1NzMyOH0.QItR9TwvX8EOSO3tVE1_9XBfa8tN_hiF2Tq4AYF_d-w";
+const KEY_STORE = "sabores_clave";
+
+let clave = "";
+let clientes = [];
+let filtro = "pendientes";
+
+function guardarClave(v){ try { v ? localStorage.setItem(KEY_STORE, v) : localStorage.removeItem(KEY_STORE); } catch(e){} }
+function leerClave(){ try { return localStorage.getItem(KEY_STORE) || ""; } catch(e){ return ""; } }
+
+async function rpc(fn, body){
+  const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+    method: "POST",
+    headers: { apikey: SB_ANON, Authorization: `Bearer ${SB_ANON}`, "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    let msg = "";
+    try { msg = (await res.json()).message || ""; } catch(e){}
+    const err = new Error(msg || ("Error " + res.status));
+    err.claveIncorrecta = /clave incorrecta/i.test(msg);
+    throw err;
+  }
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+function escHtml(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function mensajePersonal(c){
+  const t = document.getElementById("mensaje").value;
+  return t.replace(/{{\s*nombre\s*}}/gi, c.nombre).replace(/{{\s*puntos\s*}}/gi, String(c.puntos));
+}
+
+function setFiltro(f){
+  filtro = f;
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("activo", b.dataset.f === f));
+  render();
+}
+
+function render(){
+  const q = (document.getElementById("buscar").value || "").toLowerCase().trim();
+  const conWa = clientes.filter(c => c.wa);
+  const pend = conWa.filter(c => c.status !== "enviado");
+  const env = conWa.filter(c => c.status === "enviado");
+  const sin = clientes.filter(c => !c.wa);
+  document.getElementById("n-pendientes").textContent = pend.length;
+  document.getElementById("n-enviados").textContent = env.length;
+  document.getElementById("n-sin").textContent = sin.length;
+  document.getElementById("n-todos").textContent = clientes.length;
+
+  let base = filtro === "pendientes" ? pend : filtro === "enviados" ? env : filtro === "sin" ? sin : clientes;
+  const filas = base.filter(c => !q || c.nombre.toLowerCase().includes(q));
+
+  document.getElementById("vacio").classList.toggle("hidden", filas.length > 0);
+  document.getElementById("lista").innerHTML = filas.map(c => {
+    let accion;
+    let estado = "";
+    if (c.wa) {
+      const href = `https://wa.me/${c.wa}?text=${encodeURIComponent(mensajePersonal(c))}`;
+      const aviso = c.valido ? "" : ' title="Número corto o incompleto — revisalo antes de mandar"';
+      const enviado = c.status === "enviado";
+      accion = `<a class="btn btn-wa" data-act="enviar" data-id="${c.id}" href="${href}" target="_blank" rel="noopener"${aviso}>${enviado ? "Abrir de nuevo" : "Abrir WhatsApp"}${c.valido ? "" : " ⚠️"}</a>`;
+      if (enviado) {
+        const f = c.contactado_at ? new Date(c.contactado_at).toLocaleDateString("es-AR") : "";
+        estado = `<div class="estado">✓ Enviado${f ? " · " + f : ""}</div>`;
+        accion += `<button class="btn btn-ghost" data-act="deshacer" data-id="${c.id}">Deshacer</button>`;
+      }
+    } else {
+      accion = `<span class="btn btn-off">Sin WhatsApp</span>`;
+    }
+    return `<div class="card">
+      <div class="nombre">${escHtml(c.nombre)}</div>
+      <div class="meta"><span class="pts">${escHtml(c.puntos)} pts</span></div>
+      <div class="tel">${escHtml(c.telefono || "Sin teléfono cargado")}</div>
+      ${estado}
+      <div class="acciones">${accion}</div>
+    </div>`;
+  }).join("");
+}
+
+async function marcar(id, status){
+  const c = clientes.find(x => x.id === id);
+  if (!c) return;
+  c.status = status;
+  c.contactado_at = status === "enviado" ? new Date().toISOString() : null;
+  render();
+  try { await rpc("sabores_marcar", { p_clave: clave, p_id: id, p_status: status }); }
+  catch(e){ console.error(e); }
+}
+
+document.getElementById("lista").addEventListener("click", e => {
+  const el = e.target.closest("[data-act]");
+  if (!el) return;
+  const id = Number(el.dataset.id);
+  if (el.dataset.act === "enviar") {
+    const c = clientes.find(x => x.id === id);
+    if (c && c.status !== "enviado") marcar(id, "enviado");
+  } else if (el.dataset.act === "deshacer") {
+    marcar(id, "pendiente");
+  }
+});
+
+document.getElementById("tabs").addEventListener("click", e => {
+  const b = e.target.closest("button[data-f]");
+  if (b) setFiltro(b.dataset.f);
+});
+document.getElementById("buscar").addEventListener("input", render);
+document.getElementById("mensaje").addEventListener("input", render);
+
+async function entrar(k, silencioso){
+  const err = document.getElementById("err");
+  err.classList.add("hidden");
+  try {
+    clientes = await rpc("sabores_listar", { p_clave: k });
+    clave = k;
+    guardarClave(k);
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    document.getElementById("sub").textContent = clientes.length + " clientes cargados. Tocá \"Abrir WhatsApp\" en cada tarjeta para mandar el mensaje, uno por uno.";
+    render();
+  } catch(e) {
+    if (e.claveIncorrecta) guardarClave("");
+    if (!silencioso) {
+      err.textContent = e.claveIncorrecta ? "Clave incorrecta." : "No se pudo conectar con la base. Revisá tu conexión y probá de nuevo.";
+      err.classList.remove("hidden");
+    }
+  }
+}
+
+document.getElementById("login").addEventListener("submit", e => {
+  e.preventDefault();
+  const k = document.getElementById("clave").value.trim();
+  if (k) entrar(k, false);
+});
+
+const guardada = leerClave();
+if (guardada) entrar(guardada, true);
+</script>
+</body>
+</html>
