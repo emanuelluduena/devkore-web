@@ -140,7 +140,10 @@ h1 .accent{color:var(--cyan)}
 .price-box .amount sup{font-size:1rem;font-weight:500;vertical-align:top;margin-right:.15rem;color:var(--muted)}
 .price-box .per{color:var(--muted);font-size:.85rem;margin-bottom:1.6rem;display:block;font-family:'JetBrains Mono',monospace}
 .price-list{text-align:left;margin-bottom:1.8rem}
-.price-box .btn-primary{width:100%;display:block;text-align:center}
+.price-box .btn-primary{width:100%;display:block;text-align:center;margin-top:auto}
+.price-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.5rem;max-width:880px;margin:0 auto}
+.price-row .price-box{margin:0;max-width:none;display:flex;flex-direction:column}
+.price-row .price-list{flex:1}
 .price-aside{max-width:420px;margin:1.25rem auto 0;text-align:center;color:var(--muted);font-size:.88rem}
 
 /* modulos */
@@ -382,7 +385,8 @@ footer .foot-note{display:block;margin-top:2rem;color:var(--muted);font-size:.75
 
 <section class="wrap" id="precios">
   <h2 class="mono">// precios</h2>
-  <p class="lead">Mi Gestor con un solo precio, todo incluido. Fidelización y páginas web se presupuestan según tu negocio.</p>
+  <p class="lead">Mi Gestor y fidelización, con precio fijo y todo incluido. Las páginas web se presupuestan según tu negocio.</p>
+  <div class="price-row">
   <div class="price-box">
     <span class="tagline mono">MI GESTOR · 15 DÍAS DE PRUEBA GRATIS</span>
     <span class="amount"><sup>$</sup>50.000</span>
@@ -397,7 +401,19 @@ footer .foot-note{display:block;margin-top:2rem;color:var(--muted);font-size:.75
     <a class="btn-primary" href="registro.html">Empezar prueba gratis</a>
     <p style="margin-top:1rem;color:var(--muted);font-size:.8rem;font-family:'JetBrains Mono',monospace">Pagando anual: $40.000/mes ($480.000/año)</p>
   </div>
-  <p class="price-aside">¿Te interesa la fidelización o una página web? <a class="link-cyan" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20un%20presupuesto" target="_blank" rel="noopener">Escribinos y lo armamos juntos.</a></p>
+  <div class="price-box">
+    <span class="tagline mono">FIDELIZACIÓN</span>
+    <span class="amount"><sup>$</sup>20.000</span>
+    <span class="per">/ mes</span>
+    <div class="price-list">
+      <div class="split-line"><span class="check">✓</span> Cada compra suma puntos solos</div>
+      <div class="split-line"><span class="check">✓</span> Vos definís cuánto vale cada punto</div>
+      <div class="split-line"><span class="check">✓</span> Vos elegís qué premios se canjean</div>
+    </div>
+    <a class="btn-primary" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20sumar%20la%20fidelizaci%C3%B3n%20a%20mi%20negocio" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+  </div>
+  </div>
+  <p class="price-aside">¿Querés una página web para tu negocio? <a class="link-cyan" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio" target="_blank" rel="noopener">Escribinos y la armamos a medida.</a></p>
 </section>
 
 <section class="wrap" id="modulos">
