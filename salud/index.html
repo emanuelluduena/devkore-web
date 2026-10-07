@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Gestor Salud — Turnos e historias clínicas para centros de salud</title>
+<meta name="description" content="Agenda de turnos para todos los profesionales, historias clínicas por profesional, estudios y documentos por paciente. Probá el demo, sin registrarte.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Mi Gestor Salud — Turnos e historias clínicas para centros de salud">
+<meta property="og:description" content="Agenda de turnos, historias clínicas y estudios de tu centro en un solo lugar. Probá el demo, sin registrarte.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f2a4a;--navy2:#17406e;--green:#10b981;--green2:#059669;--bg:#f3f6fa;--line:#e2e8f0;--txt:#1e293b;--mut:#64748b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--txt);background:#fff;line-height:1.55}
+a{color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.top{background:var(--navy);position:sticky;top:0;z-index:10}
+.top .wrap{display:flex;align-items:center;height:58px;gap:18px}
+.logo{font-weight:800;font-size:18px;color:#fff;margin-right:auto}
+.logo span{color:var(--green)}
+.top a.l{color:#cbd5e1;text-decoration:none;font-size:14px;font-weight:500}
+.top a.l:hover{color:#fff}
+.btn{display:inline-block;background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 16px;font-weight:600;font-size:14px;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn.g{background:var(--green)}.btn.g:hover{background:var(--green2)}
+.btn.o{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.big{padding:13px 22px;font-size:16px;border-radius:12px}
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:64px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.pill{display:inline-block;background:rgba(16,185,129,.18);color:#6ee7b7;border-radius:99px;padding:5px 12px;font-size:13px;font-weight:600}
+h1{font-size:42px;line-height:1.12;margin:16px 0;font-weight:800;letter-spacing:-.02em}
+.hero p{font-size:18px;color:#cbd5e1;margin:0 0 26px;max-width:520px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero small{display:block;margin-top:14px;color:#94a3b8}
+/* mock de agenda */
+.mock{background:#fff;border-radius:16px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.35);color:var(--txt)}
+.mock .bar{display:flex;gap:6px;margin-bottom:10px}.mock .bar i{width:9px;height:9px;border-radius:50%;background:#e2e8f0}
+.mock .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mock .col b{display:block;font-size:11px;text-align:center;color:var(--mut);margin-bottom:6px}
+.mock .t{border-left:4px solid var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);border-radius:7px;padding:6px 8px;font-size:11px;margin-bottom:6px}
+.mock .t u{text-decoration:none;display:block;color:var(--mut);font-size:10px}
+.mock .gap{height:22px}
+section{padding:64px 0}
+section.alt{background:var(--bg)}
+h2{font-size:30px;margin:0 0 8px;letter-spacing:-.01em}
+.sub{color:var(--mut);margin:0 0 32px;font-size:17px;max-width:640px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{margin:10px 0 6px;font-size:17px}
+.card p{margin:0;color:var(--mut);font-size:15px}
+.ico{font-size:26px}
+.soon{margin-top:22px;color:var(--mut);font-size:14px}
+.demo h3{margin:0 0 4px;font-size:19px}
+.demo .esp{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 16px}
+.demo .esp span{background:#e8f5ef;color:#065f46;border-radius:99px;font-size:12px;font-weight:600;padding:3px 10px}
+.demo .go{display:grid;gap:8px}
+.demo .go .btn{text-align:center}
+.demo p{margin:0;color:var(--mut);font-size:15px}
+details{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:10px;background:#fff}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--mut);margin:10px 0 0}
+.final{background:var(--navy);color:#fff;text-align:center}
+.final p{color:#cbd5e1;margin:0 auto 24px;max-width:560px;font-size:17px}
+footer{background:#0b2038;color:#94a3b8;font-size:13px;padding:22px 0;text-align:center}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.mock{display:none}h1{font-size:32px}.grid3{grid-template-columns:1fr}.top .l{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="logo">Mi Gestor <span>Salud</span></div>
+  <a class="l" href="#funciones">Funciones</a>
+  <a class="l" href="#demos">Demos</a>
+  <a class="btn g" href="#demos">Probar el demo</a>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <span class="pill">Para centros de salud integrales</span>
+    <h1>Los turnos y las historias clínicas de tu centro, en un solo lugar</h1>
+    <p>Agenda para todos los profesionales, historia clínica por profesional, y estudios y documentos de cada paciente. Pensado para centros chicos y multidisciplinarios.</p>
+    <div class="cta">
+      <a class="btn g big" href="#demos">Probar el demo gratis</a>
+      <a class="btn o big" href="https://wa.me/5493515426971?text=Hola%2C%20vi%20el%20demo%20de%20Mi%20Gestor%20Salud%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener">Quiero esto en mi centro</a>
+    </div>
+    <small>No hace falta registrarse ni instalar nada.</small>
+  </div>
+  <div class="mock" aria-hidden="true">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div class="cols">
+      <div class="col"><b>Psicología</b>
+        <div class="t" style="--c:#2563eb">Lucas P.<u>09:00 – 09:45</u></div><div class="gap"></div>
+        <div class="t" style="--c:#2563eb">Valentina F.<u>10:30 – 11:15</u></div></div>
+      <div class="col"><b>Fonoaudiología</b><div class="gap"></div>
+        <div class="t" style="--c:#16a34a">Sofía G.<u>09:30 – 10:00</u></div>
+        <div class="t" style="--c:#16a34a">Benjamín A.<u>10:00 – 10:45</u></div></div>
+      <div class="col"><b>Psicomotricidad</b><div class="gap"></div><div class="gap"></div>
+        <div class="t" style="--c:#d97706">Mateo R.<u>10:00 – 11:00</u></div>
+        <div class="t" style="--c:#d97706">Martina V.<u>11:30 – 12:30</u></div></div>
+    </div>
+  </div>
+</div></div>
+
+<section id="funciones"><div class="wrap">
+  <h2>Todo lo que necesita la secretaría y cada profesional</h2>
+  <p class="sub">Sin planillas sueltas ni cuadernos: cada persona del centro ve lo que le corresponde.</p>
+  <div class="grid3">
+    <div class="card"><div class="ico">📅</div><h3>Agenda para todo el centro</h3><p>Una grilla por día con todos los profesionales. Turnos repetidos cada semana, reprogramación en dos clics y sin superposiciones.</p></div>
+    <div class="card"><div class="ico">🗂️</div><h3>Historia clínica por profesional</h3><p>Cada profesional escribe y ve sus evoluciones, y puede compartir las que quiera con el equipo. Los registros no se pueden modificar ni borrar.</p></div>
+    <div class="card"><div class="ico">🩻</div><h3>Estudios y documentos</h3><p>Subí radiografías, informes, el CUD y consentimientos a la ficha de cada paciente, y encontralos al instante.</p></div>
+    <div class="card"><div class="ico">👨‍👩‍👧</div><h3>Pacientes y responsables</h3><p>Datos del paciente y de su madre, padre o tutor con teléfono y email. Aviso de vencimiento del CUD.</p></div>
+    <div class="card"><div class="ico">🔐</div><h3>Cada uno ve lo suyo</h3><p>Dirección, secretaría y profesionales tienen permisos distintos. La secretaría agenda sin acceder a lo clínico.</p></div>
+    <div class="card"><div class="ico">🧾</div><h3>Registro de actividad</h3><p>Queda registro de quién hizo qué y cuándo: turnos, fichas consultadas, documentos y cambios.</p></div>
+  </div>
+  <p class="soon">Próximamente: recordatorios de turnos por WhatsApp y planilla de asistencia mensual por obra social.</p>
+</div></section>
+
+<section id="demos" class="alt"><div class="wrap demo">
+  <h2>Probalo ahora, con un centro de ejemplo</h2>
+  <p class="sub">Elegí un tipo de centro y entrá con el rol que quieras ver. Con los datos de ejemplo podés agendar, reprogramar turnos, cargar evoluciones y subir documentos.</p>
+  <div class="grid3">
+    <div class="card"><h3>Centro de rehabilitación infantil</h3>
+      <p>Niños con responsables, CUD y turnos semanales con varios profesionales a la vez.</p>
+      <div class="esp"><span>Psicología</span><span>Fonoaudiología</span><span>Psicomotricidad</span><span>Terapia ocupacional</span></div>
+      <div class="go"><a class="btn g" href="app.html?demo=rehab&rol=secretaria">Entrar como Secretaría</a><a class="btn o" href="app.html?demo=rehab&rol=profesional">Entrar como Profesional</a><a class="btn o" href="app.html?demo=rehab&rol=admin">Entrar como Dirección</a></div></div>
+    <div class="card"><h3>Consultorio de psicología</h3>
+      <p>Sesiones individuales semanales, adultos y niños, con evoluciones privadas por profesional.</p>
+      <div class="esp"><span>Psicología clínica</span><span>Infanto-juvenil</span><span>Psicopedagogía</span></div>
+      <div class="go"><a class="btn g" href="app.html?demo=psico&rol=secretaria">Entrar como Secretaría</a><a class="btn o" href="app.html?demo=psico&rol=profesional">Entrar como Profesional</a><a class="btn o" href="app.html?demo=psico&rol=admin">Entrar como Dirección</a></div></div>
+    <div class="card"><h3>Centro de kinesiología y nutrición</h3>
+      <p>Pacientes adultos, obras sociales y tratamientos con sesiones repetidas.</p>
+      <div class="esp"><span>Kinesiología</span><span>Kinesiología deportiva</span><span>Nutrición</span></div>
+      <div class="go"><a class="btn g" href="app.html?demo=kine&rol=secretaria">Entrar como Secretaría</a><a class="btn o" href="app.html?demo=kine&rol=profesional">Entrar como Profesional</a><a class="btn o" href="app.html?demo=kine&rol=admin">Entrar como Dirección</a></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap" style="max-width:760px">
+  <h2>Preguntas frecuentes</h2>
+  <p class="sub">Lo que suelen preguntar antes de probarlo.</p>
+  <details><summary>¿Puedo cargar datos reales en el demo?</summary><p>No. Los datos del demo se guardan solo en tu navegador, no en un servidor, y no deben incluir información real de pacientes. Podés reiniciar el demo cuando quieras.</p></details>
+  <details><summary>¿Qué diferencia hay con la versión para mi centro?</summary><p>En la versión para centros cada profesional tiene su propio usuario y contraseña, y los datos se guardan en la nube en lugar de en el navegador.</p></details>
+  <details><summary>¿Sirve para mi tipo de centro?</summary><p>Está pensado para centros chicos y multidisciplinarios: psicología, fonoaudiología, psicomotricidad, kinesiología, nutrición y más. Escribinos si necesitás algo puntual.</p></details>
+  <details><summary>¿Cómo lo consigo?</summary><p>Escribinos y coordinamos una charla para ver qué necesita tu centro.</p></details>
+</div></section>
+
+<section class="final"><div class="wrap">
+  <h2>¿Querés esto en tu centro?</h2>
+  <p>Contanos cuántos profesionales son y cómo agendan hoy, y te explicamos cómo empezar.</p>
+  <a class="btn g big" href="https://wa.me/5493515426971?text=Hola%2C%20vi%20el%20demo%20de%20Mi%20Gestor%20Salud%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener">Escribinos</a>
+</div></section>
+
+<footer>Mi Gestor Salud es un producto de DevKore · Córdoba, Argentina</footer>
+</body>
+</html>
