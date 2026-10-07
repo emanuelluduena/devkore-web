@@ -85,75 +85,71 @@ async function sbPatch(digits, patch) {
   if (!res.ok) throw new Error("PATCH falló: " + res.status);
 }
 
+async function sbPatchSafe(digits, patch) {
+  try { await sbPatch(digits, patch); }
+  catch (e) {
+    if (!("variante" in patch)) throw e;
+    const { variante, ...rest } = patch;
+    await sbPatch(digits, rest);
+  }
+}
+
 const FOLLOWUP_DAYS = 7;
 
-const FIRST_MSG_VARIANTS = [
-  "Hola! Soy Emanuel, desarrollador de DevKore (Córdoba) — hacemos software para negocios, desde sistemas de gestión hasta páginas web. " +
-    "Te dejo la demo de Mi Gestor, el sistema que armamos para negocios como el tuyo, para que la pruebes gratis ahora mismo, sin registrarte: " +
-    "https://migestor.com.ar/?demo=1&origen=whatsapp-contacto1\n" +
-    "📦 Stock, ventas y caja desde el celu o la compu\n" +
-    "🎁 Fidelización — tus clientes suman puntos solos en cada compra y vos definís los premios\n" +
-    "📋 Subís la lista de precios de tu proveedor y el sistema actualiza tus costos y precios solo, sin cargar producto por producto\n" +
-    "🛠️ ¿Te falta algo puntual para tu negocio? También lo hacemos a medida\n" +
-    "💰 Todo incluido en un solo precio mensual, sin módulos aparte\n" +
-    "📱 Instagram y Facebook: @solucionesdevkore\n" +
-    "📞 Contacto directo conmigo: +54 9 351 542-6971\n" +
-    "Cualquier duda te ayudo yo directamente. " +
-    "Y si hay algo que no te cierra o que le falta, contame — me sirve un montón para seguir mejorándolo.\n" +
-    "Si ya tenés tu propio sistema de ventas y no querés cambiarlo, también armamos Fidelización sola, como módulo aparte, " +
-    "para que tus clientes sumen puntos sin tocar nada de lo que ya usás: https://fidelizacion.migestor.com.ar/?demo=1",
+const MI_WSP = "+54 9 351 542-6971";
 
-  "Hola, buenas! Mi nombre es Emanuel y armo software para negocios acá en Córdoba (DevKore) — sistemas de gestión y también páginas web. " +
-    "Para negocios como el tuyo armamos Mi Gestor: control de stock, ventas y caja, con fidelización de clientes incluida " +
-    "(puntos por compra, vos elegís los premios) y todo en una sola cuota mensual, sin sorpresas ni módulos aparte. " +
-    "Y si trabajás con proveedores que te mandan lista de precios, el sistema te la matchea con tus productos una vez y después actualiza costos y precios solo cada vez que subís una lista nueva. " +
-    "Te dejo la demo gratis para que la mires vos mismo, no hace falta registrarte: " +
-    "https://migestor.com.ar/?demo=1&origen=whatsapp-contacto1\n" +
-    "Si necesitás algo más puntual también hacemos desarrollos a medida. Cualquier consulta, estoy para ayudarte. " +
-    "Instagram/Facebook: @solucionesdevkore\n" +
-    "📞 Contacto directo conmigo: +54 9 351 542-6971\n" +
-    "Y si ya tenés tu sistema de ventas armado y no te interesa cambiarlo, también vendemos Fidelización por separado — " +
-    "se suma a lo que ya usás, sin reemplazar nada: https://fidelizacion.migestor.com.ar/?demo=1",
+// Rubros de clientela fija: para ellos entra también el mensaje de Fidelización
+const FID_RUBROS = new Set(["ropa","peluqueria","heladeria","cafeteria","petshop","dietetica","bazar","libreria","jugueteria","floreria","veterinaria","zapateria","perfumeria","merceria","vivero","electrodomesticos"]);
 
-  "Hola! Te escribe Emanuel de DevKore 👋 Armamos Mi Gestor, un sistema para manejar stock, ventas y caja de tu negocio desde el celular, " +
-    "con fidelización de clientes incluida y todo en un solo precio mensual (sin módulos aparte). " +
-    "Ahora también podés subir la lista de precios de tu proveedor y el sistema te actualiza los costos y precios automáticamente, sin tener que cargar uno por uno. " +
-    "Podés probarlo gratis, sin registro: https://migestor.com.ar/?demo=1&origen=whatsapp-contacto1\n" +
-    "También hacemos páginas web y desarrollos a medida si te interesa algo específico para tu negocio. " +
-    "Cualquier duda, escribime. Nos encontrás en Insta/Face como @solucionesdevkore\n" +
-    "📞 Contacto directo conmigo: +54 9 351 542-6971\n" +
-    "Dato: si no querés cambiar tu sistema actual, la Fidelización también la vendemos sola — la probás acá: " +
-    "https://fidelizacion.migestor.com.ar/?demo=1",
-];
+const GREETINGS = ["Hola!", "Hola, buenas!", "Hola, ¿cómo andás?"];
 
-const FOLLOW_MSG_VARIANTS = [
-  "Hola! Soy Emanuel, de DevKore / Mi Gestor. Te dejo de nuevo el link de la demo, por si te quedó pendiente: " +
-    "https://migestor.com.ar/?demo=1&origen=whatsapp-seguimiento1\n" +
-    "Te escribí hace unos días sobre el sistema de gestión para tu negocio — tiene fidelización de clientes " +
-    "(puntos automáticos por compra), todo en un solo precio mensual, sin módulos aparte, y también hacemos desarrollos a medida. " +
-    "¿Llegaste a mirarlo o te quedó alguna duda? Instagram y Facebook: @solucionesdevkore\n" +
-    "Si lo que te interesa es solo la parte de fidelización (sin cambiar tu sistema de ventas), también la tenemos " +
-    "como producto aparte: https://fidelizacion.migestor.com.ar/?demo=1",
+// {n} = nombre del negocio (o "tu negocio" si el nombre es largo o raro), {g} = saludo
+const FIRST_MSGS = {
+  A: "{g} Soy Emanuel, de Córdoba. Tuve un almacén y armé un sistema para llevar stock, ventas y caja sin cuaderno ni Excel. Hoy se lo ofrezco a comercios chicos.\n\n" +
+     "¿Cómo llevás vos el stock en {n}? Si querés te lo muestro en 2 minutos, sin compromiso.",
+  B: "{g} Soy Emanuel. Armé un sistema de gestión para comercios chicos y te propongo algo: yo te cargo tus productos y precios y lo probás 15 días gratis con tu negocio real, no con datos de ejemplo.\n\n" +
+     "¿Te lo dejo armado para {n}?",
+  C: "{g} Soy Emanuel. Hice un sistema para que tus clientes sumen puntos en cada compra y los canjeen por premios que vos elegís, para que vuelvan más seguido. Funciona aparte de lo que ya uses para vender.\n\n" +
+     "¿Ya tenés algo así en {n} o te lo muestro en 2 minutos?",
+  D: "{g} Soy Emanuel, desarrollo software para comercios. Hice un sistema que lleva stock, ventas y caja desde el celular, y actualiza tus precios solo cuando te llega la lista del proveedor.\n\n" +
+     "¿Hoy cómo hacés para actualizar precios cuando suben las cosas? Te muestro cómo lo resuelve, sin compromiso.",
+};
 
-  "Hola, buenas! Emanuel de DevKore otra vez — hace unos días te había comentado sobre Mi Gestor, el sistema de gestión con fidelización " +
-    "de clientes y precio único mensual. Te vuelvo a dejar la demo por si no llegaste a verla: " +
-    "https://migestor.com.ar/?demo=1&origen=whatsapp-seguimiento1\n" +
-    "Cualquier duda me escribís sin problema. Y si preferís probar solo la fidelización de clientes por separado, " +
-    "sin tocar tu sistema actual, esta es la demo: https://fidelizacion.migestor.com.ar/?demo=1",
-];
+const FOLLOW_MSGS = {
+  F1: "{g} Soy Emanuel otra vez. Te escribí hace unos días por el sistema de gestión para comercios. No quiero molestar, solo consultarte: ¿te sirve que te lo muestre o prefiero no insistir?",
+  F2: "{g} Emanuel de nuevo. Si te quedó la duda de si te sirve para {n}, te lo cargo con tus productos y lo probás 15 días gratis, sin compromiso. ¿Te interesa o lo dejamos acá?",
+};
 
-function pickVariant(list, digits) {
-  let hash = 0;
-  for (let i = 0; i < digits.length; i++) hash = (hash * 31 + digits.charCodeAt(i)) >>> 0;
-  return list[hash % list.length];
+function hashOf(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return h;
 }
 
-function firstMsg(digits) {
-  return pickVariant(FIRST_MSG_VARIANTS, digits || String(Math.random()));
+// Usa el nombre del negocio solo si es corto y "limpio"; si no, "tu negocio"
+function negocioName(nombre) {
+  const s = (nombre || "").trim();
+  if (!s || s.length > 28 || /[|·"“”]|''| - |–|—|&|@|[0-9]{3,}/.test(s)) return "tu negocio";
+  return s;
 }
-function followMsg(digits) {
-  return pickVariant(FOLLOW_MSG_VARIANTS, digits || String(Math.random()));
+
+function fill(tpl, lead) {
+  const d = String(lead.digits || Math.random());
+  const g = GREETINGS[hashOf(d.split("").reverse().join("")) % GREETINGS.length];
+  return tpl.replace("{g}", g).replace(/\{n\}/g, negocioName(lead.nombre)) +
+    "\n\n📞 Mi WhatsApp directo: " + MI_WSP;
 }
+
+function firstVariantId(lead) {
+  const ids = FID_RUBROS.has(lead.rubro) ? ["A", "B", "C"] : ["A", "B", "D"];
+  return ids[hashOf(String(lead.digits || Math.random())) % ids.length];
+}
+function followVariantId(lead) {
+  const ids = Object.keys(FOLLOW_MSGS);
+  return ids[hashOf(String(lead.digits || Math.random())) % ids.length];
+}
+function firstMsg(lead) { return fill(FIRST_MSGS[firstVariantId(lead)], lead); }
+function followMsg(lead) { return fill(FOLLOW_MSGS[followVariantId(lead)], lead); }
 
 function waLink(digits, text) {
   return "https://wa.me/" + digits + "?text=" + encodeURIComponent(text);
@@ -223,10 +219,10 @@ function render() {
     let actionBtn = "";
     let noWaBtn = "";
     if (currentTab === "nuevos") {
-      actionBtn = '<a class="btn btn-wa" data-act="first" data-digits="' + digits + '" href="' + waLink(digits, firstMsg(digits)) + '" target="_blank" rel="noopener">Abrir WhatsApp</a>';
+      actionBtn = '<a class="btn btn-wa" data-act="first" data-digits="' + digits + '" href="' + waLink(digits, firstMsg(lead)) + '" target="_blank" rel="noopener">Abrir WhatsApp</a>';
       noWaBtn = '<button class="btn btn-ghost" data-act="nowa" data-digits="' + digits + '">Sin WhatsApp</button>';
     } else if (currentTab === "seguimiento") {
-      actionBtn = '<a class="btn btn-wa" data-act="follow" data-digits="' + digits + '" href="' + waLink(digits, followMsg(digits)) + '" target="_blank" rel="noopener">Enviar seguimiento</a>';
+      actionBtn = '<a class="btn btn-wa" data-act="follow" data-digits="' + digits + '" href="' + waLink(digits, followMsg(lead)) + '" target="_blank" rel="noopener">Enviar seguimiento</a>';
     }
 
     const markBtn = (currentTab === "espera" || currentTab === "seguido")
@@ -264,7 +260,7 @@ function render() {
       const nowIso = new Date().toISOString();
       lead.status = "contactado"; lead.first_contact_at = nowIso;
       render();
-      try { await sbPatch(digits, { status: "contactado", first_contact_at: nowIso }); }
+      try { await sbPatchSafe(digits, { status: "contactado", first_contact_at: nowIso, variante: firstVariantId(lead) }); }
       catch (e) { console.error(e); }
     });
   });
@@ -275,7 +271,7 @@ function render() {
       const nowIso = new Date().toISOString();
       lead.follow_up_at = nowIso;
       render();
-      try { await sbPatch(digits, { follow_up_at: nowIso }); }
+      try { await sbPatchSafe(digits, { follow_up_at: nowIso }); }
       catch (e) { console.error(e); }
     });
   });
