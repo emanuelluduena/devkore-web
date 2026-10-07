@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mi Gestor Salud — Demo</title>
 <meta name="robots" content="noindex">
+<script>
+(function(){try{
+  var q=new URLSearchParams(location.search),d=q.get('demo');
+  if(['rehab','psico','kine'].indexOf(d)<0)d='rehab';
+  var k='msalud_aviso_'+d;
+  if(sessionStorage.getItem(k))return;
+  sessionStorage.setItem(k,'1');
+  var ref='';try{ref=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
+  fetch('https://yabschiaphpiozajnwxx.supabase.co/functions/v1/demo-salud-evento',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({demo:d,rol:q.get('rol')||'login',ref:ref}),keepalive:true}).catch(function(){});
+}catch(e){}})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0f2a4a;--navy2:#17406e;--green:#10b981;--bg:#f3f6fa;--card:#fff;--line:#e2e8f0;--txt:#1e293b;--mut:#64748b;--red:#dc2626;--amb:#d97706;--blue:#2563eb}
