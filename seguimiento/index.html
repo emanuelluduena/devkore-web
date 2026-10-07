@@ -96,29 +96,51 @@ async function sbPatchSafe(digits, patch) {
 
 const FOLLOWUP_DAYS = 7;
 
-const MI_WSP = "+54 9 351 542-6971";
-
 // Rubros de clientela fija: para ellos entra también el mensaje de Fidelización
 const FID_RUBROS = new Set(["ropa","peluqueria","heladeria","cafeteria","petshop","dietetica","bazar","libreria","jugueteria","floreria","veterinaria","zapateria","perfumeria","merceria","vivero","electrodomesticos"]);
 
 const GREETINGS = ["Hola!", "Hola, buenas!", "Hola, ¿cómo andás?"];
 
-// {n} = nombre del negocio (o "tu negocio" si el nombre es largo o raro), {g} = saludo
-const FIRST_MSGS = {
-  A: "{g} Soy Emanuel, de Córdoba. Tuve un almacén y armé un sistema para llevar stock, ventas y caja sin cuaderno ni Excel. Hoy se lo ofrezco a comercios chicos.\n\n" +
-     "¿Cómo llevás vos el stock en {n}? Si querés te lo muestro en 2 minutos, sin compromiso.",
-  B: "{g} Soy Emanuel. Armé un sistema de gestión para comercios chicos y te propongo algo: yo te cargo tus productos y precios y lo probás 15 días gratis con tu negocio real, no con datos de ejemplo.\n\n" +
-     "¿Te lo dejo armado para {n}?",
-  C: "{g} Soy Emanuel. Hice un sistema para que tus clientes sumen puntos en cada compra y los canjeen por premios que vos elegís, para que vuelvan más seguido. Funciona aparte de lo que ya uses para vender.\n\n" +
-     "¿Ya tenés algo así en {n} o te lo muestro en 2 minutos?",
-  D: "{g} Soy Emanuel, desarrollo software para comercios. Hice un sistema que lleva stock, ventas y caja desde el celular, y actualiza tus precios solo cuando te llega la lista del proveedor.\n\n" +
-     "¿Hoy cómo hacés para actualizar precios cuando suben las cosas? Te muestro cómo lo resuelve, sin compromiso.",
-};
-
-const FOLLOW_MSGS = {
-  F1: "{g} Soy Emanuel otra vez. Te escribí hace unos días por el sistema de gestión para comercios. No quiero molestar, solo consultarte: ¿te sirve que te lo muestre o prefiero no insistir?",
-  F2: "{g} Emanuel de nuevo. Si te quedó la duda de si te sirve para {n}, te lo cargo con tus productos y lo probás 15 días gratis, sin compromiso. ¿Te interesa o lo dejamos acá?",
-};
+// Mensajes. {g} = saludo rotativo, {n} = nombre del negocio (o "tu negocio" si es largo o raro).
+// rubros: "todos" | "fid" (solo rubros de clientela fija) | "nofid" (el resto)
+const MSGS = [
+  {
+    "id": "A",
+    "tipo": "primero",
+    "rubros": "todos",
+    "texto": "{g} Soy Emanuel, de Córdoba. Armé un sistema para que cualquier comercio lleve stock, ventas y caja desde el celular, sin cuaderno ni Excel. Incluye módulos de horarios, fidelización de clientes y mensajería. Lo podés probar ahora mismo, sin registrarte ni instalar nada:\nhttps://migestor.com.ar/?demo=1&origen=whatsapp-contacto-a\n\nSi te gusta, yo te lo cargo con tus productos y lo probás 15 días gratis.\n\n📞 Mi WhatsApp directo: +54 9 351 542-6971"
+  },
+  {
+    "id": "B",
+    "tipo": "primero",
+    "rubros": "todos",
+    "texto": "{g} Soy Emanuel. Tengo un sistema de gestión para comercios (stock, ventas y caja, más módulos de horarios, fidelización y mensajería) y podés ver cómo funciona en 1 minuto, sin registrarte:\nhttps://migestor.com.ar/?demo=1&origen=whatsapp-contacto-b\n\nMirálo y contame qué te parece. Si te sirve, te cargo tus productos para que lo pruebes con tu negocio real, 15 días gratis.\n\n📞 Mi WhatsApp directo: +54 9 351 542-6971"
+  },
+  {
+    "id": "C",
+    "tipo": "primero",
+    "rubros": "fid",
+    "texto": "{g} Soy Emanuel. Hice un sistema para que tus clientes sumen puntos en cada compra y canjeen premios que vos elegís, para que vuelvan más seguido. Funciona aparte de lo que ya uses para vender. Mirá cómo funciona (sin registrarte):\nhttps://fidelizacion.migestor.com.ar/?demo=1&origen=whatsapp-contacto-c\n\n¿Me contás si te sirve para {n}?\n\n📞 Mi WhatsApp directo: +54 9 351 542-6971"
+  },
+  {
+    "id": "D",
+    "tipo": "primero",
+    "rubros": "nofid",
+    "texto": "{g} Soy Emanuel, desarrollo software para comercios. Mi sistema lleva stock, ventas y caja, tiene módulos de horarios, fidelización y mensajería, y actualiza tus precios solo cuando te llega la lista del proveedor, sin cargar producto por producto. Probalo acá, sin registrarte:\nhttps://migestor.com.ar/?demo=1&origen=whatsapp-contacto-d\n\nDespués contame qué te parece.\n\n📞 Mi WhatsApp directo: +54 9 351 542-6971"
+  },
+  {
+    "id": "F1",
+    "tipo": "seguimiento",
+    "rubros": "todos",
+    "texto": "{g} Emanuel de nuevo. Te dejo el demo por si no llegaste a verlo (incluye horarios, fidelización y mensajería):\nhttps://migestor.com.ar/?demo=1&origen=whatsapp-seguimiento-a\n\nCualquier duda te ayudo yo directamente. Y si querés, te lo cargo con tus productos para que lo pruebes de verdad.\n\n📞 Mi WhatsApp directo: +54 9 351 542-6971"
+  },
+  {
+    "id": "F2",
+    "tipo": "seguimiento",
+    "rubros": "todos",
+    "texto": "{g} Te escribí hace unos días por el sistema de gestión para comercios. Si no es para vos, sin problema. Si te quedó la duda, acá podés verlo sin registrarte:\nhttps://migestor.com.ar/?demo=1&origen=whatsapp-seguimiento-b\n\n¿Te interesa que te lo deje armado 15 días gratis para {n} o lo dejamos acá?\n\n📞 Mi WhatsApp directo: +54 9 351 542-6971"
+  }
+];
 
 function hashOf(str) {
   let h = 0;
@@ -136,20 +158,17 @@ function negocioName(nombre) {
 function fill(tpl, lead) {
   const d = String(lead.digits || Math.random());
   const g = GREETINGS[hashOf(d.split("").reverse().join("")) % GREETINGS.length];
-  return tpl.replace("{g}", g).replace(/\{n\}/g, negocioName(lead.nombre)) +
-    "\n\n📞 Mi WhatsApp directo: " + MI_WSP;
+  return tpl.replace(/\{g\}/g, g).replace(/\{n\}/g, negocioName(lead.nombre));
 }
 
-function firstVariantId(lead) {
-  const ids = FID_RUBROS.has(lead.rubro) ? ["A", "B", "C"] : ["A", "B", "D"];
-  return ids[hashOf(String(lead.digits || Math.random())) % ids.length];
+function pickMsg(tipo, lead) {
+  const fid = FID_RUBROS.has(lead.rubro);
+  const pool = MSGS.filter(m => m.tipo === tipo && (m.rubros === "todos" || (m.rubros === "fid" && fid) || (m.rubros === "nofid" && !fid)));
+  return pool[hashOf(String(lead.digits || Math.random())) % pool.length];
 }
-function followVariantId(lead) {
-  const ids = Object.keys(FOLLOW_MSGS);
-  return ids[hashOf(String(lead.digits || Math.random())) % ids.length];
-}
-function firstMsg(lead) { return fill(FIRST_MSGS[firstVariantId(lead)], lead); }
-function followMsg(lead) { return fill(FOLLOW_MSGS[followVariantId(lead)], lead); }
+function firstVariantId(lead) { return pickMsg("primero", lead).id; }
+function firstMsg(lead) { return fill(pickMsg("primero", lead).texto, lead); }
+function followMsg(lead) { return fill(pickMsg("seguimiento", lead).texto, lead); }
 
 function waLink(digits, text) {
   return "https://wa.me/" + digits + "?text=" + encodeURIComponent(text);
