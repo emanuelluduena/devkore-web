@@ -151,7 +151,7 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 .mock .gap{height:22px}
 .demos{background:#fff;color:var(--txt);border-radius:16px;padding:20px;margin-top:22px}
 .demos h3{font-size:16px;color:var(--navy);margin-bottom:12px}
-.demo-row{display:grid;grid-template-columns:1.2fr repeat(3,auto);gap:8px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.demo-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
 .demo-row:first-of-type{border-top:none}
 .demo-row b{font-size:14px;color:var(--navy)}
 .demo-row small{display:block;color:var(--mut);font-size:12px;font-weight:400}
@@ -200,8 +200,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
 @media(max-width:600px){
   .prods{grid-template-columns:1fr}
   .feats{grid-template-columns:1fr}
-  .demo-row{grid-template-columns:1fr 1fr 1fr}
-  .demo-row>div{grid-column:1/-1}
+  .demo-row{grid-template-columns:1fr}
   .top .btn{padding:8px 12px;font-size:12.5px}
   .top svg{width:150px;height:29px}
   section{padding:52px 0}
@@ -385,7 +384,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
       <div class="feat"><b>📅 Agenda de todo el centro</b><span>Grilla por día con todos los profesionales, turnos semanales y reprogramación en dos clics.</span></div>
       <div class="feat"><b>🗂️ Historia clínica por profesional</b><span>Cada uno ve lo suyo y comparte lo que quiera. Los registros no se modifican.</span></div>
       <div class="feat"><b>🩻 Estudios y documentos</b><span>Radiografías, informes, CUD y consentimientos en la ficha de cada paciente.</span></div>
-      <div class="feat"><b>🔐 Cada uno ve lo suyo</b><span>La secretaría agenda sin acceder a lo clínico. Con registro de actividad.</span></div>
+      <div class="feat"><b>🔐 Cada uno ve lo suyo</b><span>El administrador da permisos distintos a cada usuario. Con registro de actividad.</span></div>
     </div>
     <div class="cta-row">
       <a class="btn g big" href="salud/">Probar el demo gratis</a>
@@ -411,11 +410,11 @@ footer .footer-links span{margin:0 9px;opacity:.4}
     <div class="demos">
       <h3>Elegí un centro de ejemplo y entrá</h3>
       <div class="demo-row"><div><b>Rehabilitación infantil</b><small>Psicología, fono, psicomotricidad, TO</small></div>
-        <a class="btn s g" href="salud/app.html?demo=rehab&amp;rol=secretaria">Secretaría</a><a class="btn s o" href="salud/app.html?demo=rehab&amp;rol=profesional">Profesional</a><a class="btn s o" href="salud/app.html?demo=rehab&amp;rol=admin">Dirección</a></div>
+        <a class="btn s g" href="salud/app.html?demo=rehab&amp;rol=admin">Probar el demo</a></div>
       <div class="demo-row"><div><b>Consultorio de psicología</b><small>Sesiones individuales semanales</small></div>
-        <a class="btn s g" href="salud/app.html?demo=psico&amp;rol=secretaria">Secretaría</a><a class="btn s o" href="salud/app.html?demo=psico&amp;rol=profesional">Profesional</a><a class="btn s o" href="salud/app.html?demo=psico&amp;rol=admin">Dirección</a></div>
+        <a class="btn s g" href="salud/app.html?demo=psico&amp;rol=admin">Probar el demo</a></div>
       <div class="demo-row"><div><b>Kinesiología y nutrición</b><small>Obras sociales y sesiones repetidas</small></div>
-        <a class="btn s g" href="salud/app.html?demo=kine&amp;rol=secretaria">Secretaría</a><a class="btn s o" href="salud/app.html?demo=kine&amp;rol=profesional">Profesional</a><a class="btn s o" href="salud/app.html?demo=kine&amp;rol=admin">Dirección</a></div>
+        <a class="btn s g" href="salud/app.html?demo=kine&amp;rol=admin">Probar el demo</a></div>
     </div>
   </div>
 </div></section>

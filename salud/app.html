@@ -185,7 +185,7 @@ function seed(){
   const C=DEMO_CFG[DEMO],hoy=ymd(new Date());
   const norm=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   const profs=C.profs.map((x,i)=>({id:'p'+(i+1),nombre:x[0],apellido:x[1],esp:x[2],mat:x[3],color:x[4],activo:true}));
-  const users=[{id:'u1',usuario:'admin',pass:'admin123',nombre:'Dirección',rol:'admin'},{id:'u2',usuario:'secretaria',pass:'secre123',nombre:'Secretaría',rol:'secretaria'}]
+  const users=[{id:'u1',usuario:'admin',pass:'admin123',nombre:'Dirección',rol:'admin',profId:'p1'},{id:'u2',usuario:'secretaria',pass:'secre123',nombre:'Secretaría',rol:'secretaria'}]
     .concat(profs.map((p,i)=>({id:'u'+(i+3),usuario:norm(p.nombre),pass:'demo123',nombre:'Lic. '+p.nombre+' '+p.apellido,rol:'profesional',profId:p.id})));
   const mes=ymd(new Date(Date.now()+40*864e5));
   const pacientes=C.pacs.map((x,i)=>{const r1=x[7]||[],r2=x[8]||[];
@@ -198,7 +198,7 @@ function seed(){
   C.manana.forEach(([pi,pr,desde,dur,est,mot])=>turnos.push(T(pi,pr,1,desde,dur,est,mot)));
   C.pasado.forEach(([pi,pr,off,desde,dur,est,mot])=>turnos.push(T(pi,pr,off,desde,dur,est,mot)));
   const evols=C.evols.map(([pi,pr,off,tipo,texto,comp],i)=>({id:'e'+(i+1),pacId:'a'+pi,profId:'p'+pr,fecha:addDays(hoy,off),tipo,texto,comp,creado:Date.now()+off*864e5}));
-  return {centro:C.centro,profs,users,pacientes,turnos,evols,docs:[],audit:[]};
+  return {centro:C.centro,profs,users,pacientes,turnos,evols,docs:[],audit:[],mig3:1};
 }
 let S=(()=>{try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}})()||seed();
 /* Migración: datos guardados con la versión anterior (campo único "tutor") */
@@ -211,6 +211,7 @@ let S=(()=>{try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return nul
     }
   });
   S.turnos.forEach(t=>{if(!t.hist)t.hist=[]});
+  if(!S.mig3){S.mig3=1;const a=S.users.find(u=>u.rol==='admin');if(a&&!a.profId&&S.profs[0])a.profId=S.profs[0].id}
 })();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('No hay más espacio en el navegador para esta demo. En la versión real los archivos van a un almacenamiento en la nube.')}}
 function log(accion,detalle){S.audit.unshift({t:Date.now(),u:me?.nombre||'-',accion,detalle:detalle||''});S.audit=S.audit.slice(0,300);save()}
@@ -229,32 +230,51 @@ let me=null;
 try{const id=sessionStorage.getItem(SKEY);me=S.users.find(u=>u.id===id)||null}catch(e){}
 (function entradaDirecta(){
   const rol=Q.get('rol');if(!rol)return;
-  const u=S.users.find(x=>x.rol===rol);
+  const u=S.users.find(x=>x.rol===rol&&x.activo!==false);
   if(u){me=u;try{sessionStorage.setItem(SKEY,u.id)}catch(e){}}
   history.replaceState(null,'','?demo='+DEMO);
 })();
 let ui={view:'inicio',fecha:ymd(new Date()),pid:null,tab:'evol',q:'',nav:false,open:{agenda:true,pacientes:true,admin:true}};
-const esProf=()=>me.rol==='profesional';
-const veEvol=()=>me.rol!=='secretaria';
+/* Permisos: cada rol trae permisos por defecto y el administrador puede ajustarlos usuario por usuario */
+const ROLES={admin:'Administrador',secretaria:'Secretaría',profesional:'Profesional'};
+const PERMS=[
+ ['Agenda y turnos',[['agenda_todos','Ver la agenda de todos los profesionales (si no, solo la propia)'],['turnos_editar','Crear, reprogramar y cambiar el estado de turnos']]],
+ ['Pacientes',[['pac_ver','Ver pacientes y sus fichas'],['pac_editar','Crear y editar datos de pacientes']]],
+ ['Historia clínica',[['hc_ver','Leer sus propias evoluciones y las compartidas por el equipo'],['hc_todas','Leer las evoluciones de todos los profesionales'],['hc_cargar','Cargar evoluciones (requiere un profesional vinculado)']]],
+ ['Documentos',[['docs_subir','Subir estudios y documentos'],['docs_borrar','Borrar documentos']]],
+ ['Administración',[['profs','Gestionar profesionales'],['auditoria','Ver la auditoría'],['usuarios','Gestionar usuarios y permisos']]]
+];
+const ALLP=PERMS.flatMap(g=>g[1].map(x=>x[0]));
+const PERM_ROL={
+ admin:ALLP,
+ secretaria:['agenda_todos','turnos_editar','pac_ver','pac_editar','docs_subir','docs_borrar'],
+ profesional:['pac_ver','hc_ver','hc_cargar','docs_subir','turnos_editar']
+};
+const permDe=(u,k)=>u.rol==='admin'||(u.perm?!!u.perm[k]:(PERM_ROL[u.rol]||[]).includes(k));
+const can=k=>!!me&&permDe(me,k);
+const soloPropia=()=>!can('agenda_todos');
+const veEvol=()=>can('hc_ver')||can('hc_todas');
 function evolsVisibles(pacId){
-  return S.evols.filter(e=>e.pacId===pacId&&(me.rol==='admin'||(esProf()&&(e.profId===me.profId||e.comp))))
+  return S.evols.filter(e=>e.pacId===pacId&&(can('hc_todas')||(can('hc_ver')&&((me.profId&&e.profId===me.profId)||e.comp))))
     .sort((a,b)=>b.fecha.localeCompare(a.fecha)||b.creado-a.creado);
 }
 
 /* ================= Menú lateral ================= */
 const MENU=[
   {id:'inicio',l:'Inicio',i:'🏠',v:'inicio'},
-  {id:'agenda',l:'Agenda',i:'📅',items:[['Agenda diaria','agenda'],['Nuevo turno','@turno']]},
-  {id:'pacientes',l:'Pacientes',i:'👥',items:[['Listado de pacientes','pacientes'],['Nuevo paciente','@paciente']]},
-  {id:'admin',l:'Administración',i:'⚙️',roles:['admin'],items:[['Profesionales','profesionales'],['Auditoría','auditoria']]}
+  {id:'agenda',l:'Agenda',i:'📅',items:[['Agenda diaria','agenda'],['Nuevo turno','@turno','turnos_editar']]},
+  {id:'pacientes',l:'Pacientes',i:'👥',items:[['Listado de pacientes','pacientes','pac_ver'],['Nuevo paciente','@paciente','pac_editar']]},
+  {id:'admin',l:'Administración',i:'⚙️',items:[['Profesionales','profesionales','profs'],['Usuarios y permisos','usuarios','usuarios'],['Auditoría','auditoria','auditoria']]}
 ];
 function navHtml(){
   const cur=ui.view==='ficha'?'pacientes':ui.view;
-  return MENU.filter(g=>!g.roles||g.roles.includes(me.rol)).map(g=>{
+  return MENU.map(g=>{
     if(!g.items)return `<div class="grp"><button class="${cur===g.v?'on':''}" onclick="menuGo('${g.v}')"><span>${g.i}</span>${g.l}</button></div>`;
-    const act=g.items.some(([,k])=>k===cur);
+    const its=g.items.filter(([,,pm])=>!pm||can(pm));
+    if(!its.length)return '';
+    const act=its.some(([,k])=>k===cur);
     return `<div class="grp ${ui.open[g.id]?'open':''}"><button class="${act?'on':''}" onclick="tg('${g.id}',this)"><span>${g.i}</span>${g.l}<span class="car">▶</span></button>
-      <div class="sub">${g.items.map(([l,k])=>`<button class="${k===cur?'on':''}" onclick="menuGo('${k}')">${l}</button>`).join('')}</div></div>`;
+      <div class="sub">${its.map(([l,k])=>`<button class="${k===cur?'on':''}" onclick="menuGo('${k}')">${l}</button>`).join('')}</div></div>`;
   }).join('');
 }
 function tg(id,el){ui.open[id]=!ui.open[id];el.parentElement.classList.toggle('open',!!ui.open[id])}
@@ -268,12 +288,14 @@ function menuGo(k){
 /* ================= Render base ================= */
 function render(){
   if(!me){$('#app').innerHTML=vLogin();return}
-  const views={inicio:vInicio,agenda:vAgenda,pacientes:vPacientes,ficha:vFicha,profesionales:vProfs,auditoria:vAudit};
+  const views={inicio:vInicio,agenda:vAgenda,pacientes:vPacientes,ficha:vFicha,profesionales:vProfs,usuarios:vUsuarios,auditoria:vAudit};
+  const VP={pacientes:'pac_ver',ficha:'pac_ver',profesionales:'profs',usuarios:'usuarios',auditoria:'auditoria'};
+  if(VP[ui.view]&&!can(VP[ui.view]))ui.view='inicio';
   $('#app').innerHTML=`<div id="shell">
    <aside id="side" class="${ui.nav?'open':''}">
      <div class="logo">Mi Gestor <span>Salud</span><small>${esc(S.centro||'Centro de salud')}</small></div>
      <nav>${navHtml()}</nav>
-     <div class="user"><b>${esc(me.nombre)}</b><br>${me.rol}<br><button class="btn s o" style="margin-top:8px" onclick="logout()">Cerrar sesión</button></div>
+     <div class="user"><b>${esc(me.nombre)}</b><br>${ROLES[me.rol]||me.rol}<br><button class="btn s o" style="margin-top:8px" onclick="logout()">Cerrar sesión</button></div>
    </aside>
    <div class="ov ${ui.nav?'on':''}" onclick="ui.nav=false;render()"></div>
    <div class="content"><div class="topbar"><button onclick="ui.nav=true;render()">☰</button><b>Mi Gestor Salud</b></div>
@@ -290,9 +312,9 @@ function vLogin(){return `<div class="login"><h1>Mi Gestor <span>Salud</span></h
  <div class="card"><label>Usuario</label><input id="lu" autocomplete="off" onkeydown="if(event.key==='Enter')$('#lp').focus()">
  <label>Contraseña</label><input id="lp" type="password" onkeydown="if(event.key==='Enter')login()">
  <div class="acts"><button class="btn" style="width:100%" onclick="login()">Ingresar</button></div>
- <div class="hint"><b>${esc(S.centro)}</b> — usuarios de la demo:<br>${S.users.map(u=>`${u.usuario} / ${u.pass} <span>(${u.rol==='profesional'?esc(prof(u.profId).esp):u.rol})</span>`).join('<br>')}<br><br><a href="./">← Elegir otro demo</a></div></div></div>`}
+ <div class="hint"><b>${esc(S.centro)}</b> — usuarios de la demo:<br>${S.users.filter(u=>u.activo!==false).map(u=>`${esc(u.usuario)} / ${esc(u.pass)} <span>(${u.rol==='profesional'?esc(prof(u.profId)?.esp||'profesional'):(ROLES[u.rol]||u.rol)})</span>`).join('<br>')}<br><br><a href="./">← Elegir otro demo</a></div></div></div>`}
 function login(){
-  const u=S.users.find(x=>x.usuario===$('#lu').value.trim().toLowerCase()&&x.pass===$('#lp').value);
+  const u=S.users.find(x=>x.activo!==false&&x.usuario===$('#lu').value.trim().toLowerCase()&&x.pass===$('#lp').value);
   if(!u){alert('Usuario o contraseña incorrectos');return}
   me=u;sessionStorage.setItem(SKEY,u.id);ui.view='inicio';log('login');render();
 }
@@ -301,10 +323,10 @@ function logout(){me=null;sessionStorage.removeItem(SKEY);render()}
 /* ================= Inicio ================= */
 function vInicio(){
   const hoy=ymd(new Date());
-  const ts=S.turnos.filter(t=>t.fecha===hoy&&t.estado!=='cancelado'&&(!esProf()||t.profId===me.profId)).sort((a,b)=>a.desde-b.desde);
+  const ts=S.turnos.filter(t=>t.fecha===hoy&&t.estado!=='cancelado'&&(!soloPropia()||t.profId===me.profId)).sort((a,b)=>a.desde-b.desde);
   const c=e=>ts.filter(t=>t.estado===e).length;
-  const cuds=esProf()?[]:S.pacientes.filter(p=>p.cud&&p.cudVenc&&(new Date(p.cudVenc)-new Date())/864e5<90);
-  return `<div class="bar"><h2>Hola, ${esc(me.nombre)}</h2><button class="btn g" onclick="nuevoTurno()">+ Nuevo turno</button><button class="btn o" onclick="go('agenda',{fecha:ymd(new Date())})">Ir a la agenda</button></div>
+  const cuds=!(can('agenda_todos')&&can('pac_ver'))?[]:S.pacientes.filter(p=>p.cud&&p.cudVenc&&(new Date(p.cudVenc)-new Date())/864e5<90);
+  return `<div class="bar"><h2>Hola, ${esc(me.nombre)}</h2>${can('turnos_editar')?'<button class="btn g" onclick="nuevoTurno()">+ Nuevo turno</button>':''}<button class="btn o" onclick="go('agenda',{fecha:ymd(new Date())})">Ir a la agenda</button></div>
   <div class="mut" style="margin:-6px 0 14px">${diaLargo(hoy)}</div>
   <div class="stats"><div class="stat"><b>${ts.length}</b><span>Turnos hoy</span></div><div class="stat"><b>${c('pendiente')}</b><span>Por confirmar</span></div><div class="stat"><b>${c('confirmado')}</b><span>Confirmados</span></div><div class="stat"><b>${c('presente')}</b><span>Presentes</span></div><div class="stat"><b>${c('ausente')}</b><span>Ausentes</span></div></div>
   <div class="card" style="padding:0;overflow:auto"><div style="padding:14px 16px 4px"><b>Turnos de hoy</b></div>
@@ -315,7 +337,7 @@ function vInicio(){
 
 /* ================= Agenda ================= */
 function vAgenda(){
-  const profs=esProf()?S.profs.filter(p=>p.id===me.profId):S.profs.filter(p=>p.activo);
+  const profs=soloPropia()?S.profs.filter(p=>p.id===me.profId):S.profs.filter(p=>p.activo);
   const ts=S.turnos.filter(t=>t.fecha===ui.fecha&&t.estado!=='cancelado');
   const H0=8*60,H1=20*60,STEP=30,skip={};let rows='';
   for(let m=H0;m<H1;m+=STEP){
@@ -327,7 +349,7 @@ function vAgenda(){
         const span=Math.max(1,Math.ceil(t.dur/STEP));
         for(let i=1;i<span;i++)skip[p.id+'_'+(m+i*STEP)]=1;
         rows+=`<td rowspan="${span}"><div class="tcard" style="--c:${p.color}" onclick="verTurno('${t.id}')"><b>${esc(pacNom(t.pacId))}</b>${hm(t.desde)}–${hm(t.desde+t.dur)} <span class="badge ${t.estado}">${t.estado}</span></div></td>`;
-      }else rows+=`<td class="libre" onclick="nuevoTurno('${p.id}',${m})"></td>`;
+      }else rows+=can('turnos_editar')?`<td class="libre" onclick="nuevoTurno('${p.id}',${m})"></td>`:'<td></td>';
     }
     rows+='</tr>';
   }
@@ -337,7 +359,7 @@ function vAgenda(){
    <input type="date" value="${ui.fecha}" onchange="ui.fecha=this.value;render()">
    <button class="btn o" onclick="cambiarFecha(1)">▶</button>
    <button class="btn o" onclick="ui.fecha=ymd(new Date());render()">Hoy</button>
-   <button class="btn g" onclick="nuevoTurno()">+ Nuevo turno</button></div>
+   ${can('turnos_editar')?'<button class="btn g" onclick="nuevoTurno()">+ Nuevo turno</button>':''}</div>
    <div class="mut" style="margin-bottom:10px">${tot} turno${tot===1?'':'s'} este día · clic en un horario libre para agendar · clic en un turno para ver, reprogramar o cambiar su estado</div>
    <div class="agenda"><table><tr><th class="hora ph" style="position:sticky;top:0"></th>${profs.map(p=>`<th class="ph">${esc(p.nombre+' '+p.apellido)}<small>${esc(p.esp)}</small></th>`).join('')}</tr>${rows}</table></div>`;
 }
@@ -346,13 +368,14 @@ const solapa=(a,b)=>a.fecha===b.fecha&&a.desde<b.desde+b.dur&&b.desde<a.desde+a.
 const durOpts=sel=>[...new Set([30,45,60,90,sel])].filter(Boolean).sort((a,b)=>a-b).map(d=>`<option value="${d}" ${d===sel?'selected':''}>${d} min</option>`).join('');
 
 function nuevoTurno(profId,min,pacId){
+  if(!can('turnos_editar')){alert('Tu usuario no puede agendar turnos.');return}
   const ps=S.profs.filter(p=>p.activo);
-  profId=profId||(esProf()?me.profId:ps[0]?.id);
+  profId=profId||(soloPropia()&&me.profId?me.profId:ps[0]?.id);
   const pre=pacId?pac(pacId):null;
   openModal(`<h3>Nuevo turno</h3>
   <label>Paciente</label><input id="t_pac" list="dl_pac" placeholder="Escribí apellido o DNI" value="${pre?esc(pacLabel(pre)):''}">
   <datalist id="dl_pac">${S.pacientes.map(p=>`<option value="${esc(pacLabel(p))}">`).join('')}</datalist>
-  <div class="row2"><div><label>Profesional</label><select id="t_prof" ${esProf()?'disabled':''}>${ps.map(p=>`<option value="${p.id}" ${p.id===profId?'selected':''}>${esc(p.nombre+' '+p.apellido+' · '+p.esp)}</option>`).join('')}</select></div>
+  <div class="row2"><div><label>Profesional</label><select id="t_prof" ${soloPropia()&&me.profId?'disabled':''}>${ps.map(p=>`<option value="${p.id}" ${p.id===profId?'selected':''}>${esc(p.nombre+' '+p.apellido+' · '+p.esp)}</option>`).join('')}</select></div>
   <div><label>Fecha</label><input type="date" id="t_fecha" value="${ui.fecha}"></div></div>
   <div class="row2"><div><label>Hora</label><input type="time" id="t_hora" step="900" value="${hm(min??540)}"></div>
   <div><label>Duración</label><select id="t_dur">${durOpts(45)}</select></div></div>
@@ -364,7 +387,7 @@ const pacLabel=p=>`${p.apellido}, ${p.nombre}${p.dni?' · '+p.dni:''}`;
 function guardarTurno(){
   const p=S.pacientes.find(x=>pacLabel(x)===$('#t_pac').value.trim());
   if(!p){alert('Elegí un paciente de la lista. Si es nuevo, cargalo primero en Pacientes.');return}
-  const profId=esProf()?me.profId:$('#t_prof').value;
+  const profId=soloPropia()&&me.profId?me.profId:$('#t_prof').value;
   const fecha=$('#t_fecha').value,hora=$('#t_hora').value;
   if(!fecha||!hora){alert('Completá fecha y hora');return}
   const dur=+$('#t_dur').value,n=+$('#t_rep').value,serie=n>1?uid():'';
@@ -387,18 +410,19 @@ function verTurno(id){
   <div class="mut">${esc(profNom(t.profId))} · ${diaLargo(t.fecha)} · ${hm(t.desde)}–${hm(t.desde+t.dur)}</div>
   ${rs[0]?`<div class="mut" style="margin-top:4px">${esc(respTxt(rs[0]))}${rs[0].t?' · '+esc(rs[0].t):''}</div>`:''}
   ${t.motivo?`<p>${esc(t.motivo)}</p>`:''}
-  <label>Estado</label><div style="display:flex;gap:6px;flex-wrap:wrap">${ESTADOS.map(e=>`<button class="btn s ${t.estado===e?'':'o'}" onclick="estadoTurno('${id}','${e}')">${e}</button>`).join('')}</div>
+  <label>Estado</label><div style="display:flex;gap:6px;flex-wrap:wrap">${can('turnos_editar')?ESTADOS.map(e=>`<button class="btn s ${t.estado===e?'':'o'}" onclick="estadoTurno('${id}','${e}')">${e}</button>`).join(''):`<span class="badge ${t.estado}">${t.estado}</span>`}</div>
   ${hist?`<label>Reprogramaciones</label>${hist}`:''}
-  <div class="acts"><button class="btn" onclick="editarTurno('${id}')">Reprogramar / editar</button>
-  <button class="btn o" onclick="closeModal();abrirFicha('${t.pacId}')">Abrir ficha</button>
-  ${t.serie?`<button class="btn r s" onclick="cancelarSerie('${id}')">Cancelar este y los siguientes</button>`:''}
+  <div class="acts">${can('turnos_editar')?`<button class="btn" onclick="editarTurno('${id}')">Reprogramar / editar</button>`:''}
+  ${can('pac_ver')?`<button class="btn o" onclick="closeModal();abrirFicha('${t.pacId}')">Abrir ficha</button>`:''}
+  ${t.serie&&can('turnos_editar')?`<button class="btn r s" onclick="cancelarSerie('${id}')">Cancelar este y los siguientes</button>`:''}
   <button class="btn o" onclick="closeModal()">Cerrar</button></div>`);
 }
 function editarTurno(id){
+  if(!can('turnos_editar')){alert('Tu usuario no puede modificar turnos.');return}
   const t=S.turnos.find(x=>x.id===id);if(!t)return;
   const ps=S.profs.filter(p=>p.activo||p.id===t.profId);
   openModal(`<h3>Reprogramar / editar turno</h3><div class="mut">${esc(pacNom(t.pacId))}</div>
-  <div class="row2"><div><label>Profesional</label><select id="e_prof" ${esProf()?'disabled':''}>${ps.map(p=>`<option value="${p.id}" ${p.id===t.profId?'selected':''}>${esc(p.nombre+' '+p.apellido+' · '+p.esp)}</option>`).join('')}</select></div>
+  <div class="row2"><div><label>Profesional</label><select id="e_prof" ${soloPropia()&&me.profId?'disabled':''}>${ps.map(p=>`<option value="${p.id}" ${p.id===t.profId?'selected':''}>${esc(p.nombre+' '+p.apellido+' · '+p.esp)}</option>`).join('')}</select></div>
   <div><label>Fecha</label><input type="date" id="e_fecha" value="${t.fecha}"></div></div>
   <div class="row2"><div><label>Hora</label><input type="time" id="e_hora" step="900" value="${hm(t.desde)}"></div>
   <div><label>Duración</label><select id="e_dur">${durOpts(t.dur)}</select></div></div>
@@ -410,7 +434,7 @@ function guardarEdicionTurno(id){
   const t=S.turnos.find(x=>x.id===id);
   const fecha=$('#e_fecha').value,hora=$('#e_hora').value;
   if(!fecha||!hora){alert('Completá fecha y hora');return}
-  const n={...t,profId:esProf()?t.profId:$('#e_prof').value,fecha,desde:toMin(hora),dur:+$('#e_dur').value,motivo:$('#e_mot').value.trim()};
+  const n={...t,profId:soloPropia()&&me.profId?t.profId:$('#e_prof').value,fecha,desde:toMin(hora),dur:+$('#e_dur').value,motivo:$('#e_mot').value.trim()};
   const otro=S.turnos.find(x=>x.id!==id&&x.estado!=='cancelado'&&solapa(x,n)&&(x.profId===n.profId||x.pacId===n.pacId));
   if(otro){alert(otro.profId===n.profId?'Ese horario se superpone con otro turno del profesional.':'El paciente ya tiene otro turno en ese horario.');return}
   const desc=x=>`${fmtF(x.fecha)} ${hm(x.desde)}–${hm(x.desde+x.dur)} · ${profNom(x.profId)}`;
@@ -421,8 +445,9 @@ function guardarEdicionTurno(id){
   if(cambio&&(t.estado==='cancelado'||t.estado==='ausente'))t.estado='pendiente'; // vuelve a quedar activo
   save();closeModal();if(ui.view==='agenda')ui.fecha=n.fecha;render();
 }
-function estadoTurno(id,e){const t=S.turnos.find(x=>x.id===id);t.estado=e;log('estado_turno',`${pacNom(t.pacId)} → ${e}`);closeModal();render()}
+function estadoTurno(id,e){if(!can('turnos_editar'))return;const t=S.turnos.find(x=>x.id===id);t.estado=e;log('estado_turno',`${pacNom(t.pacId)} → ${e}`);closeModal();render()}
 function cancelarSerie(id){
+  if(!can('turnos_editar'))return;
   const t=S.turnos.find(x=>x.id===id);
   S.turnos.filter(x=>x.serie===t.serie&&x.fecha>=t.fecha).forEach(x=>x.estado='cancelado');
   log('cancelar_serie',pacNom(t.pacId));closeModal();render();
@@ -437,12 +462,13 @@ function filasPac(){
 }
 function vPacientes(){
   return `<div class="bar"><h2>Pacientes</h2><input type="search" placeholder="Buscar por paciente, DNI o responsable" value="${esc(ui.q)}" oninput="ui.q=this.value;$('#tbPac').innerHTML=filasPac()">
-  <button class="btn g" onclick="editarPaciente()">+ Nuevo paciente</button></div>
+  ${can('pac_editar')?'<button class="btn g" onclick="editarPaciente()">+ Nuevo paciente</button>':''}</div>
   <div class="card" style="padding:0;overflow:auto"><table><thead><tr><th>Paciente</th><th>DNI</th><th>Edad</th><th>Obra social</th><th>Responsable</th><th></th></tr></thead><tbody id="tbPac">${filasPac()}</tbody></table></div>`;
 }
-function abrirFicha(id){log('ver_ficha',pacNom(id));go('ficha',{pid:id,tab:veEvol()?'evol':'docs'})}
+function abrirFicha(id){if(!can('pac_ver'))return;log('ver_ficha',pacNom(id));go('ficha',{pid:id,tab:veEvol()?'evol':'docs'})}
 const PKEYS=['apellido','nombre','dni','nac','tel','email','os','afil','r1v','r1n','r1a','r1t','r1e','r2v','r2n','r2a','r2t','r2e','cudVenc','notas'];
 function editarPaciente(id){
+  if(!can('pac_editar')){alert('Tu usuario no puede editar datos de pacientes.');return}
   const p=id?pac(id):Object.fromEntries(PKEYS.map(k=>[k,'']).concat([['cud',false]]));
   const f=(k,l,t='text')=>`<div><label>${l}</label><input id="f_${k}" type="${t}" value="${esc(p[k])}"></div>`;
   const rb=i=>`<div class="rbox"><b>Responsable ${i}${i===1?' (contacto principal)':''}</b>
@@ -478,8 +504,8 @@ function vFicha(){
   if(!tabs.find(t=>t[0]===ui.tab))ui.tab=tabs[0][0];
   const body={evol:tEvol,docs:tDocs,turnos:tTurnos,datos:tDatos}[ui.tab](p);
   return `<div class="bar"><button class="btn o" onclick="go('pacientes')">← Pacientes</button><h2>${esc(p.apellido)}, ${esc(p.nombre)}</h2>
-  <button class="btn o" onclick="editarPaciente('${p.id}')">Editar datos</button>
-  <button class="btn g" onclick="nuevoTurno(null,null,'${p.id}')">+ Turno</button></div>
+  ${can('pac_editar')?`<button class="btn o" onclick="editarPaciente('${p.id}')">Editar datos</button>`:''}
+  ${can('turnos_editar')?`<button class="btn g" onclick="nuevoTurno(null,null,'${p.id}')">+ Turno</button>`:''}</div>
   <div class="card"><div class="mut">DNI ${esc(p.dni)||'-'} · ${edad(p.nac)} · ${esc(p.os)||'Sin obra social'} ${esc(p.afil)}</div>
   ${resps(p).map(r=>`<div class="mut" style="margin-top:4px">👤 ${esc(respTxt(r))}${r.t?' · 📞 '+esc(r.t):''}${r.e?' · ✉️ '+esc(r.e):''}</div>`).join('')}
   ${p.cud?`<div style="margin-top:8px"><span class="badge ${dias!==null&&dias<90?'warn':'ok'}">CUD${p.cudVenc?' vence '+fmtF(p.cudVenc)+(dias!==null&&dias<90?` (${dias<0?'vencido':'en '+dias+' días'})`:''):''}</span></div>`:''}
@@ -487,13 +513,13 @@ function vFicha(){
 }
 function tEvol(p){
   const l=evolsVisibles(p.id);
-  const form=esProf()?`<div class="evo" style="background:#f8fafc"><b>Nueva evolución</b>
+  const form=(can('hc_cargar')&&me.profId)?`<div class="evo" style="background:#f8fafc"><b>Nueva evolución</b>
    <div class="row2"><div><label>Fecha</label><input type="date" id="ev_f" value="${ymd(new Date())}"></div>
    <div><label>Tipo</label><select id="ev_t"><option>Sesión</option><option>Evaluación</option><option>Informe</option><option>Entrevista familiar</option></select></div></div>
    <label>Contenido</label><textarea id="ev_x" placeholder="Evolución, observaciones, plan de trabajo..."></textarea>
    <label><input type="checkbox" id="ev_c" style="width:auto"> Compartir con el resto del equipo del centro</label>
    <div class="acts"><button class="btn g" onclick="guardarEvol('${p.id}')">Guardar evolución</button></div></div>`
-   :'<div class="note">Solo los profesionales pueden cargar evoluciones. Como administrador podés leer todas.</div>';
+   :'<div class="note">Tu usuario no puede cargar evoluciones (hace falta el permiso y un profesional vinculado).</div>';
   return `<div class="note">Las evoluciones no se pueden editar ni borrar (requisito de integridad de la historia clínica). Para corregir, cargá una nueva evolución aclaratoria.</div>
   ${form}<div class="bar" style="margin-top:14px"><b style="flex:1">Evoluciones visibles para vos (${l.length})</b><button class="btn s o" onclick="imprimirHC('${p.id}')">Imprimir</button></div>
   ${l.map(e=>`<div class="evo"><div class="h"><b>${fmtF(e.fecha)}</b> · ${esc(e.tipo)} · ${esc(profNom(e.profId))} (${esc(prof(e.profId)?.esp||'')}) ${e.comp?'<span class="badge ok">compartida</span>':'<span class="badge">privada</span>'}</div><div class="t">${esc(e.texto)}</div></div>`).join('')||'<p class="mut">Todavía no hay evoluciones visibles.</p>'}`;
@@ -511,13 +537,14 @@ function imprimirHC(pid){
 }
 function tDocs(p){
   const l=S.docs.filter(d=>d.pacId===p.id).sort((a,b)=>b.t-a.t);
-  return `<div class="evo" style="background:#f8fafc"><b>Subir documento</b>
+  const formDoc=can('docs_subir')?`<div class="evo" style="background:#f8fafc"><b>Subir documento</b>
   <div class="row2"><div><label>Tipo</label><select id="d_t"><option value="estudio">Estudio / radiografía</option><option value="informe">Informe</option><option value="cud">CUD</option><option value="receta">Receta / orden</option><option value="consentimiento">Consentimiento</option><option value="otro">Otro</option></select></div>
   <div><label>Archivo (PDF o imagen)</label><input type="file" id="d_f" accept=".pdf,image/*"></div></div>
   <div class="acts"><button class="btn g" onclick="subirDoc('${p.id}')">Subir</button></div>
-  <div class="mut" style="font-size:12px">Demo: máx. 1 MB por archivo. En la versión real se guardan en almacenamiento privado en la nube.</div></div>
+  <div class="mut" style="font-size:12px">Demo: máx. 1 MB por archivo. En la versión real se guardan en almacenamiento privado en la nube.</div></div>`:'';
+  return `${formDoc}
   <table style="margin-top:10px"><thead><tr><th>Fecha</th><th>Tipo</th><th>Archivo</th><th>Subido por</th><th></th></tr></thead><tbody>
-  ${l.map(d=>`<tr><td>${new Date(d.t).toLocaleDateString('es-AR')}</td><td><span class="badge">${d.tipo}</span></td><td>${esc(d.nombre)}</td><td>${esc(d.por)}</td><td><a class="btn s o" style="text-decoration:none" href="${d.data}" download="${esc(d.nombre)}" target="_blank">Abrir</a> ${me.rol!=='profesional'?`<button class="btn s r" onclick="borrarDoc('${d.id}')">Borrar</button>`:''}</td></tr>`).join('')||'<tr><td colspan="5" class="mut">Sin documentos</td></tr>'}</tbody></table>`;
+  ${l.map(d=>`<tr><td>${new Date(d.t).toLocaleDateString('es-AR')}</td><td><span class="badge">${d.tipo}</span></td><td>${esc(d.nombre)}</td><td>${esc(d.por)}</td><td><a class="btn s o" style="text-decoration:none" href="${d.data}" download="${esc(d.nombre)}" target="_blank">Abrir</a> ${can('docs_borrar')?`<button class="btn s r" onclick="borrarDoc('${d.id}')">Borrar</button>`:''}</td></tr>`).join('')||'<tr><td colspan="5" class="mut">Sin documentos</td></tr>'}</tbody></table>`;
 }
 function subirDoc(pid){
   const f=$('#d_f').files[0];if(!f){alert('Elegí un archivo');return}
@@ -536,7 +563,7 @@ function tDatos(p){
   const rs=[1,2].map(i=>{const x={v:p['r'+i+'v'],n:p['r'+i+'n'],a:p['r'+i+'a'],t:p['r'+i+'t'],e:p['r'+i+'e']};
     return (x.n||x.a||x.t||x.e)?r('Responsable '+i+(x.v?' ('+x.v+')':''),[respNom(x),x.t,x.e].filter(Boolean).join(' · ')):''}).join('');
   return `<table>${r('Teléfono propio',p.tel)}${r('Email propio',p.email)}${r('Nacimiento',fmtF(p.nac))}${r('Obra social',(p.os+' '+p.afil).trim())}${rs||r('Responsables','')}${r('Notas administrativas',p.notas)}</table>
-  <div class="acts"><button class="btn o" onclick="editarPaciente('${p.id}')">Editar datos</button></div>`;
+  ${can('pac_editar')?`<div class="acts"><button class="btn o" onclick="editarPaciente('${p.id}')">Editar datos</button></div>`:''}`;
 }
 
 /* ================= Profesionales y auditoría (admin) ================= */
@@ -562,6 +589,52 @@ function vAudit(){
   return `<div class="bar"><h2>Auditoría</h2><button class="btn o" onclick="if(confirm('Esto borra TODOS los datos de la demo y vuelve a los de ejemplo. ¿Seguro?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar demo</button></div>
   <div class="card" style="padding:0;overflow:auto"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Detalle</th></tr></thead><tbody>
   ${S.audit.map(a=>`<tr><td>${new Date(a.t).toLocaleString('es-AR')}</td><td>${esc(a.u)}</td><td><span class="badge">${esc(a.accion)}</span></td><td>${esc(a.detalle)}</td></tr>`).join('')||'<tr><td colspan="4" class="mut">Sin registros</td></tr>'}</tbody></table></div>`;
+}
+
+/* ================= Usuarios y permisos (admin) ================= */
+function vUsuarios(){
+  const cant=u=>ALLP.filter(k=>permDe(u,k)).length;
+  return `<div class="bar"><h2>Usuarios y permisos</h2><button class="btn g" onclick="editarUsuario()">+ Nuevo usuario</button></div>
+  <div class="note">Cada usuario tiene un rol y permisos que se pueden ajustar uno por uno. El rol Administrador siempre tiene todos los permisos.</div>
+  <div class="card" style="padding:0;overflow:auto"><table><thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Profesional vinculado</th><th>Permisos</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${S.users.map(u=>`<tr><td><b>${esc(u.usuario)}</b></td><td>${esc(u.nombre)}</td><td><span class="badge">${esc(ROLES[u.rol]||u.rol)}</span></td><td>${u.profId?esc(profNom(u.profId)):'<span class="mut">-</span>'}</td><td>${cant(u)} de ${ALLP.length}${u.perm&&u.rol!=='admin'?' <span class="badge warn">personalizado</span>':''}</td><td><span class="badge ${u.activo!==false?'ok':''}">${u.activo!==false?'activo':'inactivo'}</span></td><td style="white-space:nowrap"><button class="btn s o" onclick="editarUsuario('${u.id}')">Editar</button> ${u.id!==me.id?`<button class="btn s o" onclick="toggleUsuario('${u.id}')">${u.activo!==false?'Desactivar':'Activar'}</button>`:''}</td></tr>`).join('')}</tbody></table></div>
+  <p class="mut">Demo: las contraseñas se guardan en tu navegador. En la versión real se guardan cifradas.</p>`;
+}
+function permsHtml(u){
+  const adm=u.rol==='admin';
+  return (adm?'<div class="note">El rol Administrador tiene todos los permisos y no se pueden quitar.</div>':'<div class="mut" style="font-size:12px;margin-bottom:4px">Al cambiar el rol se cargan los permisos por defecto de ese rol. Después podés ajustarlos.</div>')+
+  PERMS.map(([g,items])=>`<h4 class="sec">${g}</h4>${items.map(([k,l])=>`<label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;color:var(--txt);font-size:14px;margin:6px 0"><input type="checkbox" id="pm_${k}" style="width:auto;margin-top:3px" ${permDe(u,k)?'checked':''} ${adm?'disabled':''}> <span>${l}</span></label>`).join('')}`).join('');
+}
+function cambiarRolUsuario(){$('#u_perms').innerHTML=permsHtml({rol:$('#u_rol').value,perm:null})}
+function editarUsuario(id){
+  const u=id?S.users.find(x=>x.id===id):{usuario:'',nombre:'',pass:'',rol:'secretaria',profId:'',activo:true};
+  const yo=!!id&&id===me.id;
+  openModal(`<h3>${id?'Editar':'Nuevo'} usuario</h3>
+  <div class="row2"><div><label>Nombre a mostrar</label><input id="u_nom" value="${esc(u.nombre)}"></div><div><label>Usuario (para ingresar)</label><input id="u_usr" value="${esc(u.usuario)}" autocomplete="off"></div>
+  <div><label>Contraseña</label><input id="u_pass" value="${esc(u.pass||'')}" autocomplete="off"></div>
+  <div><label>Rol</label><select id="u_rol" onchange="cambiarRolUsuario()" ${yo?'disabled':''}>${Object.entries(ROLES).map(([k,l])=>`<option value="${k}" ${u.rol===k?'selected':''}>${l}</option>`).join('')}</select></div>
+  <div><label>Profesional vinculado</label><select id="u_prof"><option value="">— Ninguno —</option>${S.profs.map(p=>`<option value="${p.id}" ${u.profId===p.id?'selected':''}>${esc(p.nombre+' '+p.apellido+' · '+p.esp)}</option>`).join('')}</select></div></div>
+  <div class="mut" style="font-size:12px;margin-top:6px">Si el usuario es profesional, vinculalo a su ficha: así ve su propia agenda y firma sus evoluciones.</div>
+  <h4 class="sec" style="font-size:15px">Permisos</h4>
+  <div id="u_perms">${permsHtml(u)}</div>
+  <div class="acts"><button class="btn o" onclick="closeModal()">Cancelar</button><button class="btn g" onclick="guardarUsuario('${id||''}')">Guardar</button></div>`,true);
+}
+function guardarUsuario(id){
+  if(!can('usuarios'))return;
+  const nom=$('#u_nom').value.trim(),usr=$('#u_usr').value.trim().toLowerCase(),pass=$('#u_pass').value,profId=$('#u_prof').value;
+  const rol=id&&id===me.id?me.rol:$('#u_rol').value;
+  if(!nom||!usr||!pass){alert('Nombre, usuario y contraseña son obligatorios');return}
+  if(S.users.some(x=>x.usuario===usr&&x.id!==id)){alert('Ya existe un usuario con ese nombre');return}
+  if(rol==='profesional'&&!profId){alert('Un usuario con rol Profesional tiene que estar vinculado a un profesional.');return}
+  const perm=rol==='admin'?null:Object.fromEntries(ALLP.map(k=>[k,$('#pm_'+k).checked]));
+  if(id&&id===me.id&&perm&&!perm.usuarios){alert('No podés quitarte a vos mismo el permiso de gestionar usuarios.');return}
+  if(id){Object.assign(S.users.find(x=>x.id===id),{nombre:nom,usuario:usr,pass,rol,profId,perm});log('editar_usuario',usr)}
+  else{S.users.push({id:uid(),nombre:nom,usuario:usr,pass,rol,profId,perm,activo:true});log('crear_usuario',usr)}
+  save();closeModal();render();
+}
+function toggleUsuario(id){
+  const u=S.users.find(x=>x.id===id);if(!u||u.id===me.id)return;
+  u.activo=u.activo===false;log('toggle_usuario',u.usuario);render();
 }
 
 render();
