@@ -306,7 +306,7 @@ function render(){
    <aside id="side" class="${ui.nav?'open':''}">
      <div class="logo">Mi Gestor <span>Salud</span><small>${esc(S.centro||'Centro de salud')}</small></div>
      <nav>${navHtml()}</nav>
-     <div class="user"><b>${esc(me.nombre)}</b><br>${ROLES[me.rol]||me.rol}<br><button class="btn s o" style="margin-top:8px" onclick="logout()">Cerrar sesión</button></div>
+     <div class="user"><b>${esc(me.nombre)}</b><br>${ROLES[me.rol]||me.rol}<br><button class="btn s o" style="margin-top:8px" onclick="salir()">Cerrar sesión</button></div>
    </aside>
    <div class="ov ${ui.nav?'on':''}" onclick="ui.nav=false;render()"></div>
    <div class="content"><div class="topbar"><button onclick="ui.nav=true;render()">☰</button><b>Mi Gestor Salud</b></div>
@@ -330,6 +330,29 @@ function login(){
   me=u;sessionStorage.setItem(SKEY,u.id);ui.view='inicio';log('login');render();
 }
 function logout(){me=null;sessionStorage.removeItem(SKEY);render()}
+/* ═══ Popup de salida (igual que Mi Gestor): se muestra al salir / cerrar sesión / irse con el mouse / inactividad ═══ */
+const ALERTAS_URL='https://yabschiaphpiozajnwxx.supabase.co/functions/v1/alertas-soporte';
+let _exitShown=false,_exitSent=null;
+function avisarSalud(tipo,msg){try{fetch(ALERTAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:tipo,negocio_id:'salud-'+DEMO,negocio_nombre:'Mi Gestor Salud (demo '+DEMO+')',mensaje:msg}),keepalive:true}).catch(function(){})}catch(e){}}
+function exitOpen(){if($('#modal').classList.contains('on'))return;_exitShown=true;_exitSent=null;
+ openModal(`<div style="text-align:center"><h2 style="margin:0 0 8px">👋 ¿Te vas ya?</h2>
+ <p style="color:#64748b;margin:0 0 16px">¿Te quedaste con ganas de ver más? Hablemos y lo vemos con los datos de tu centro.</p>
+ <a class="btn g" style="display:block;margin-bottom:10px;text-decoration:none" href="${CONTACTO_URL}" target="_blank" rel="noopener" onclick="avisarSalud('salud-demo-interes','Tocó "Quiero esto en mi centro" en el popup de salida')">💬 Quiero esto en mi centro</a>
+ <div style="border-top:1px solid #e2e8f0;padding-top:14px;margin:14px 0 10px"><div style="font-size:13px;color:#64748b;margin-bottom:8px">¿Qué te pareció la demo?</div>
+ <div style="display:flex;gap:10px;justify-content:center"><button class="btn o" id="exit-si" style="font-size:20px" onclick="exitFb('si')">👍</button><button class="btn o" id="exit-no" style="font-size:20px" onclick="exitFb('no')">👎</button></div>
+ <div id="exit-no-box" style="display:none;margin-top:12px"><textarea id="exit-txt" rows="3" style="width:100%" placeholder="¿Qué no te gustó o qué te faltó? (opcional)"></textarea><button class="btn s g" style="margin-top:8px" onclick="exitEnviar()">Enviar</button></div></div>
+ <button class="btn o" style="margin-bottom:8px" onclick="closeModal()">Seguir viendo la demo</button>
+ <div style="font-size:12px;color:#94a3b8;cursor:pointer;text-decoration:underline" onclick="closeModal();exitLogout()">Salir sin más</div></div>`)}
+function exitFb(v){_exitSent=v;$('#exit-si').style.background=v==='si'?'var(--g,#16a34a)':'';$('#exit-no').style.background=v==='no'?'var(--g,#16a34a)':'';
+ if(v==='no')$('#exit-no-box').style.display='block';else{$('#exit-no-box').style.display='none';avisarSalud('salud-demo-feedback-positivo','👍 Le gustó la demo');alert('¡Qué bueno! Gracias 🙌')}}
+function exitEnviar(){var t=($('#exit-txt').value||'').trim();avisarSalud('salud-demo-feedback-negativo',t||'(sin comentario)');closeModal();alert('Gracias, tu opinión nos ayuda a crecer 🙏')}
+function exitLogout(){if(!me)return;logout()}
+function salir(){if(me&&!_exitShown)exitOpen();else logout()}
+(function(){
+ document.addEventListener('mouseout',function(e){if(me&&!_exitShown&&!e.relatedTarget&&e.clientY<=0)exitOpen()});
+ var t=null;function rst(){clearTimeout(t);t=setTimeout(function(){if(me&&!_exitShown)exitOpen()},3*60*1000)}
+ ['mousemove','keydown','click','touchstart','scroll'].forEach(function(ev){document.addEventListener(ev,rst,{passive:true})});rst();
+})();
 
 /* ================= Inicio ================= */
 function vInicio(){
