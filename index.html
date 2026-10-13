@@ -608,5 +608,21 @@ resetTimer();
   if (tagEl) tagEl.textContent = m.tag;
 })();
 </script>
+
+<!-- Avisa por Slack cada vez que alguien entra a la página (vía landing-visita en Supabase) -->
+<script>
+(function () {
+  try {
+    const origen = new URLSearchParams(window.location.search).get('origen') || 'organico';
+    const pagina = window.location.pathname || '/';
+    const ref = document.referrer || '';
+    const url = 'https://yabschiaphpiozajnwxx.supabase.co/functions/v1/landing-visita'
+      + '?origen=' + encodeURIComponent(origen)
+      + '&pagina=' + encodeURIComponent(pagina)
+      + '&ref=' + encodeURIComponent(ref);
+    new Image().src = url;
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
