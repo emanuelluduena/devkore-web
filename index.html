@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DevKore — Software de gestión para comercios y centros de salud</title>
-<meta name="description" content="Mi Gestor (punto de venta), Mi Gestor Salud (turnos e historias clínicas), fidelización de clientes y páginas web a medida. Hecho en Córdoba, Argentina.">
+<title>DevKore — Software de gestión para comercios, ferreterías y centros de salud</title>
+<meta name="description" content="Mi Gestor (punto de venta), Mi Gestor Ferretería (listas de precios y presupuestos), Mi Gestor Salud (turnos e historias clínicas), fidelización de clientes y páginas web a medida. Hecho en Córdoba, Argentina.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_AR">
-<meta property="og:title" content="DevKore — Software de gestión para comercios y centros de salud">
-<meta property="og:description" content="Mi Gestor, Mi Gestor Salud, fidelización y páginas web. Soluciones a medida, sin vueltas. Córdoba, Argentina.">
+<meta property="og:title" content="DevKore — Software de gestión para comercios, ferreterías y centros de salud">
+<meta property="og:description" content="Mi Gestor, Mi Gestor Ferretería, Mi Gestor Salud, fidelización y páginas web. Soluciones a medida, sin vueltas. Córdoba, Argentina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -54,7 +54,7 @@ h1 .accent{color:var(--green)}
 .trust-note a{color:var(--mint)}
 .hero-stack{display:grid;gap:12px}
 .hs{background:#fff;color:var(--txt);border-radius:14px;padding:14px 16px;box-shadow:0 18px 40px rgba(0,0,0,.28);display:flex;gap:14px;align-items:center;text-decoration:none}
-.hs:nth-child(2){margin-left:26px}.hs:nth-child(3){margin-left:6px}.hs:nth-child(4){margin-left:32px}
+.hs:nth-child(2){margin-left:26px}.hs:nth-child(3){margin-left:6px}.hs:nth-child(4){margin-left:32px}.hs:nth-child(5){margin-left:12px}
 .hs .ic{width:44px;height:44px;border-radius:11px;background:#e8f5ef;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .hs b{display:block;font-size:15px;line-height:1.25}
 .hs span{font-size:12.5px;color:var(--mut)}
@@ -69,7 +69,9 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 .center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
 
 /* productos */
-.prods{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.prods{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.prods .prod{grid-column:span 2}
+.prods .prod:nth-child(n+4){grid-column:span 3}
 .prod{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;position:relative}
 .prod.featured{border-color:var(--green);box-shadow:0 8px 26px rgba(16,185,129,.14)}
 .prod .for{display:inline-block;align-self:flex-start;background:#e8f5ef;color:#065f46;border-radius:99px;font-size:11.5px;font-weight:700;padding:3px 10px;margin-bottom:12px}
@@ -133,6 +135,27 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 .split-card.before .split-line{color:var(--mut)}
 .check{color:var(--green);font-weight:700}
 
+/* ferretería */
+.ferre-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+.ferre .feats{margin:6px 0 26px}
+.ferre .feat{background:#fff;border:1px solid var(--line)}
+.ferre .feat span{color:var(--mut)}
+.ferre .soon{color:var(--mut)}
+.ferre .btn.ow{color:var(--navy);border-color:var(--line);background:#fff}.ferre .btn.ow:hover{border-color:var(--green)}
+.lmock .lhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mut);margin-bottom:10px}
+.lmock .lhead b{color:var(--navy);font-size:13px}
+.lmock .lchip{background:#d1fae5;color:#065f46;font-weight:700;border-radius:99px;padding:1px 9px;font-size:11px}
+.lrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.lrow small{display:block;color:var(--mut);font-size:11px}
+.lrow .old{color:var(--mut);text-decoration:line-through;font-size:12px}
+.lrow .new{font-weight:700;color:var(--navy)}
+.lrow .tag-up,.lrow .tag-new,.lrow .tag-eq{font-size:10.5px;font-weight:700;border-radius:99px;padding:1px 8px;justify-self:end}
+.lrow .tag-up{background:#fef3c7;color:#92400e}
+.lrow .tag-new{background:#dbeafe;color:#1e40af}
+.lrow .tag-eq{background:#f1f5f9;color:var(--mut)}
+.lfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:10px;margin-top:2px;font-size:12px;color:var(--mut)}
+.lfoot .lbtn{background:var(--green);color:#fff;font-weight:700;border-radius:8px;padding:5px 11px;font-size:12px}
+
 /* salud */
 .salud{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);color:#fff}
 .salud h2{color:#fff}.salud .lead{color:#cbd5e1}.salud .eyebrow{color:var(--mint)}
@@ -158,7 +181,7 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 .btn.s{padding:6px 11px;font-size:12.5px;border-radius:8px}
 
 /* precios */
-.pricing{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:860px;margin:0 auto}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto}
 .price-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px 26px;text-align:center;display:flex;flex-direction:column}
 .price-box.main{border-color:var(--green);box-shadow:0 8px 26px rgba(16,185,129,.14)}
 .price-box .tagline{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--green2);font-weight:700;margin-bottom:12px;display:block}
@@ -186,16 +209,21 @@ footer .footer-links{margin-bottom:10px}
 footer a{color:#cbd5e1;text-decoration:none}footer a:hover{color:#fff}
 footer .footer-links span{margin:0 9px;opacity:.4}
 
-@media(max-width:1000px){.prods{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1000px){
+  .prods{grid-template-columns:repeat(2,1fr)}
+  .prods .prod,.prods .prod:nth-child(n+4){grid-column:auto}
+  .prods .prod:last-child{grid-column:1/-1}
+  .pricing{grid-template-columns:1fr;max-width:460px}
+}
 @media(max-width:860px){
   .top .l{display:none}
-  .hero .wrap,.salud-grid{grid-template-columns:1fr}
+  .hero .wrap,.salud-grid,.ferre-grid{grid-template-columns:1fr}
   .hero-stack{display:none}
   h1{font-size:33px}
   .sync{grid-template-columns:1fr}
   .bridge{flex-direction:row;justify-content:center}.bridge .arrow{transform:rotate(90deg)}
   .points,.split-grid,.pricing{grid-template-columns:1fr}
-  .mock{display:none}
+  .mock,.lnote{display:none}
 }
 @media(max-width:600px){
   .prods{grid-template-columns:1fr}
@@ -218,6 +246,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   </a>
   <a class="l" href="#productos">Productos</a>
   <a class="l" href="#migestor">Mi Gestor</a>
+  <a class="l" href="#ferreteria">Ferretería</a>
   <a class="l" href="#salud">Mi Gestor Salud</a>
   <a class="l" href="#precios">Precios</a>
   <a class="btn g" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20las%20soluciones%20de%20DevKore" target="_blank" rel="noopener">Hablar por WhatsApp</a>
@@ -227,15 +256,16 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   <div>
     <span class="pill tag">SOFTWARE Y WEB · HECHO EN CÓRDOBA</span>
     <h1>Soluciones a medida, <span class="accent">sin vueltas.</span></h1>
-    <p class="sub">Sistemas de gestión para comercios y centros de salud, fidelización de clientes y páginas web. Todo conectado y probado en un negocio real antes de llegar al tuyo.</p>
+    <p class="sub">Sistemas de gestión para comercios, ferreterías y centros de salud, fidelización de clientes y páginas web. Todo conectado y probado en un negocio real antes de llegar al tuyo.</p>
     <div class="cta-row">
       <a class="btn g big" href="#productos">Ver las soluciones</a>
       <a class="btn ow big" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20las%20soluciones%20de%20DevKore" target="_blank" rel="noopener">Hablar por WhatsApp</a>
     </div>
-    <span class="trust-note">Cancelás cuando quieras · <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Mi Gestor</a> · <a href="salud/">Demo de Mi Gestor Salud</a></span>
+    <span class="trust-note">Cancelás cuando quieras · <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Mi Gestor</a> · <a href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Ferretería</a> · <a href="salud/">Demo de Mi Gestor Salud</a></span>
   </div>
   <div class="hero-stack" aria-hidden="false">
     <a class="hs" href="#migestor"><div class="ic">🛒</div><div><b>Mi Gestor</b><span>Punto de venta y gestión</span></div></a>
+    <a class="hs" href="#ferreteria"><div class="ic">🔧</div><div><b>Mi Gestor Ferretería</b><span>Listas de precios y presupuestos</span></div><i class="nuevo" style="font-style:normal">Nuevo</i></a>
     <a class="hs" href="#salud"><div class="ic">🩺</div><div><b>Mi Gestor Salud</b><span>Turnos e historias clínicas</span></div><i class="nuevo" style="font-style:normal">Nuevo</i></a>
     <a class="hs" href="#productos"><div class="ic">⭐</div><div><b>Fidelización</b><span>Puntos y premios para clientes</span></div></a>
     <a class="hs" href="#productos"><div class="ic">🌐</div><div><b>Páginas web</b><span>A medida, conectadas a tu sistema</span></div></a>
@@ -244,7 +274,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
 
 <section id="productos"><div class="wrap">
   <span class="eyebrow">Qué hacemos</span>
-  <h2>Cuatro soluciones, una sola forma de trabajar</h2>
+  <h2>Cinco soluciones, una sola forma de trabajar</h2>
   <p class="lead">Se pueden usar por separado o trabajando juntas. Elegí la que necesita tu negocio.</p>
   <div class="prods">
     <article class="prod">
@@ -254,6 +284,15 @@ footer .footer-links span{margin:0 9px;opacity:.4}
       <p>Punto de venta y gestión: cobrás, controlás el stock y sabés cuánto ganás cada día.</p>
       <ul><li>Ventas, caja y stock</li><li>Clientes y cuenta corriente</li><li>Funciona sin internet</li></ul>
       <div class="acts"><a class="btn g" href="#migestor">Ver Mi Gestor</a><a class="btn o" href="registro.html">Probar 15 días gratis</a></div>
+    </article>
+    <article class="prod featured">
+      <span class="nuevo">Nuevo</span>
+      <span class="for">Para ferreterías</span>
+      <div class="ico">🔧</div>
+      <h3>Mi Gestor Ferretería</h3>
+      <p>Ventas, presupuestos y listas de precios de tus proveedores, sin cargar producto por producto.</p>
+      <ul><li>Carga de listas de proveedor en Excel o PDF</li><li>3 listas de precios y presupuestos</li><li>Cuentas corrientes y caja</li></ul>
+      <div class="acts"><a class="btn g" href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a><a class="btn o" href="#ferreteria">Conocer más</a></div>
     </article>
     <article class="prod featured">
       <span class="nuevo">Nuevo</span>
@@ -375,6 +414,42 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   </div>
 </div></section>
 
+<section class="alt ferre" id="ferreteria"><div class="wrap ferre-grid">
+  <div>
+    <span class="eyebrow">Mi Gestor Ferretería · para ferreterías</span>
+    <h2>Tus precios al día, sin cargar producto por producto</h2>
+    <p class="lead" style="margin-bottom:22px">Subió el proveedor y ya no te toca retocar cientos de artículos a mano: cargás su lista y el sistema actualiza tus precios de venta.</p>
+    <div class="feats">
+      <div class="feat"><b>📄 Listas de proveedor en Excel o PDF</b><span>Subís la lista, el sistema reconoce tus artículos y te muestra qué sube, qué baja y qué es nuevo antes de aplicar nada.</span></div>
+      <div class="feat"><b>📈 Ajuste masivo y deshacer</b><span>Aplicás un porcentaje a lo que filtres y, si algo sale mal, volvés atrás con un clic desde el historial.</span></div>
+      <div class="feat"><b>📋 Presupuestos por WhatsApp</b><span>Numerados y listos para enviar. Si el cliente acepta, los pasás a venta y el stock se descuenta solo.</span></div>
+      <div class="feat"><b>👷 Cuentas corrientes y caja</b><span>Saldo por cliente, cobros que entran a la caja y turno diario con total por medio de pago.</span></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn g big" href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo gratis</a>
+      <a class="btn ow big" href="https://wa.me/5493515426971?text=Hola%2C%20vi%20Mi%20Gestor%20Ferreter%C3%ADa%20en%20la%20web%20de%20DevKore%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener">Quiero esto en mi ferretería</a>
+    </div>
+    <p class="soon">Metros, kilos, cajas, bolsas y rollos: vendé en la unidad que corresponde, con 3 listas de precios (mostrador, mayorista y constructora).</p>
+  </div>
+  <div>
+    <div class="mock lmock" aria-hidden="true">
+      <div class="mbar"><i></i><i></i><i></i></div>
+      <div class="lhead"><b>Lista de proveedor · vista previa</b><span class="lchip">Descuento 10% aplicado</span></div>
+      <div class="lrow"><div>Tornillo autoperforante 6×1"<small>Código TA-061</small></div><div><span class="old">$12.800</span> <span class="new">$14.100</span></div><span class="tag-up">Sube</span></div>
+      <div class="lrow"><div>Cinta métrica 5 m<small>Código CM-005</small></div><div><span class="old">$8.900</span> <span class="new">$9.600</span></div><span class="tag-up">Sube</span></div>
+      <div class="lrow"><div>Pintura látex interior 20 L<small>Código PL-020</small></div><div><span class="new">$74.500</span></div><span class="tag-eq">Igual</span></div>
+      <div class="lrow"><div>Disco de corte 115 mm<small>Producto nuevo</small></div><div><span class="new">$2.350</span></div><span class="tag-new">Nuevo</span></div>
+      <div class="lfoot"><span>3 precios a actualizar · 1 producto nuevo</span><span class="lbtn">Aplicar lista</span></div>
+    </div>
+    <p class="sync-note lnote" style="text-align:center">Ejemplo ilustrativo de la carga de una lista de precios.</p>
+    <div class="demos" style="background:#fff;border:1px solid var(--line)">
+      <h3>Explorá el sistema con datos de ejemplo</h3>
+      <div class="demo-row"><div><b>Demo de Mi Gestor Ferretería</b><small>Entrás sin registrarte. No cargues datos reales.</small></div>
+        <a class="btn s g" href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a></div>
+    </div>
+  </div>
+</div></section>
+
 <section class="salud" id="salud"><div class="wrap salud-grid">
   <div>
     <span class="eyebrow">Mi Gestor Salud · para centros de salud</span>
@@ -423,7 +498,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   <div class="center">
     <span class="eyebrow">Precios</span>
     <h2>Claro y sin letra chica</h2>
-    <p class="lead">Mi Gestor con un solo precio, todo incluido. Fidelización y páginas web se presupuestan según tu negocio.</p>
+    <p class="lead">Mi Gestor con un solo precio, todo incluido. Ferretería, Salud, fidelización y páginas web se presupuestan según tu negocio.</p>
   </div>
   <div class="pricing">
     <div class="price-box main">
@@ -439,6 +514,19 @@ footer .footer-links span{margin:0 9px;opacity:.4}
       </div>
       <a class="btn g" href="registro.html">Empezar prueba gratis</a>
       <p style="margin-top:12px;color:var(--mut);font-size:13px">Pagando anual: $40.000/mes ($480.000/año)</p>
+    </div>
+    <div class="price-box">
+      <span class="tagline">MI GESTOR FERRETERÍA</span>
+      <span class="amount txt">Probalo gratis</span>
+      <span class="per">demo disponible ahora, sin registrarte</span>
+      <div class="price-list">
+        <div class="split-line"><span class="check">✓</span> Listas de proveedor en Excel o PDF</div>
+        <div class="split-line"><span class="check">✓</span> Ajuste masivo de precios, con deshacer</div>
+        <div class="split-line"><span class="check">✓</span> Presupuestos y 3 listas de precios</div>
+        <div class="split-line"><span class="check">✓</span> Cuentas corrientes, caja y stock</div>
+      </div>
+      <a class="btn n" href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a>
+      <p style="margin-top:12px;color:var(--mut);font-size:13px">¿La querés en tu ferretería? <a href="https://wa.me/5493515426971?text=Hola%2C%20vi%20Mi%20Gestor%20Ferreter%C3%ADa%20en%20la%20web%20de%20DevKore%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener" style="color:var(--green2);font-weight:600">Escribinos por WhatsApp</a></p>
     </div>
     <div class="price-box">
       <span class="tagline">MI GESTOR SALUD</span>
@@ -460,11 +548,13 @@ footer .footer-links span{margin:0 9px;opacity:.4}
 <section id="faq"><div class="wrap">
   <div class="center"><span class="eyebrow">Preguntas frecuentes</span><h2>Lo que suelen preguntar</h2></div>
   <div class="faq" style="margin-top:28px">
-    <details><summary>¿Puedo contratar solo una de las soluciones?</summary><p>Sí. Mi Gestor, Mi Gestor Salud, la fidelización y la página web se pueden usar por separado. Juntas se potencian: por ejemplo, tu web toma los precios de tu sistema.</p></details>
+    <details><summary>¿Puedo contratar solo una de las soluciones?</summary><p>Sí. Mi Gestor, Mi Gestor Ferretería, Mi Gestor Salud, la fidelización y la página web se pueden usar por separado. Juntas se potencian: por ejemplo, tu web toma los precios de tu sistema.</p></details>
     <details><summary>¿Necesito instalar algo especial?</summary><p>No. Funcionan en la computadora, tablet o celular que ya tenés, desde el navegador.</p></details>
     <details><summary>¿Y si se corta el internet?</summary><p>Mi Gestor sigue vendiendo igual: guarda todo y sincroniza solo apenas vuelve la conexión.</p></details>
-    <details><summary>¿Puedo probarlo antes de decidir?</summary><p>Sí. Podés explorar la demo de Mi Gestor y la de Mi Gestor Salud cuando quieras, sin registrarte. Además, Mi Gestor tiene 15 días de prueba gratis. Escribinos por WhatsApp si querés que te acompañemos.</p></details>
+    <details><summary>¿Puedo probarlo antes de decidir?</summary><p>Sí. Podés explorar la demo de Mi Gestor, la de Mi Gestor Ferretería y la de Mi Gestor Salud cuando quieras, sin registrarte. Además, Mi Gestor tiene 15 días de prueba gratis. Escribinos por WhatsApp si querés que te acompañemos.</p></details>
     <details><summary>¿Puedo cargar datos reales de pacientes en el demo de Salud?</summary><p>No. Los datos del demo se guardan solo en tu navegador y no deben incluir información real. En la versión para centros cada profesional tiene su usuario y los datos se guardan en la nube.</p></details>
+    <details><summary>¿Cómo actualizo los precios de mi ferretería cuando sube un proveedor?</summary><p>Cargás la lista del proveedor (Excel, CSV o PDF), el sistema reconoce tus artículos y te muestra qué sube, qué baja y qué es nuevo. Revisás, aplicás, y si algo sale mal lo deshacés desde el historial. También podés aplicar un porcentaje a todos los artículos que filtres.</p></details>
+    <details><summary>¿Puedo cargar datos reales en el demo de Ferretería?</summary><p>No. El demo es para explorar con datos de ejemplo y se puede reiniciar, así que no cargues información real de tu negocio.</p></details>
     <details><summary>¿Mi Gestor Salud sirve para mi tipo de centro?</summary><p>Está pensado para centros chicos y multidisciplinarios: psicología, fonoaudiología, psicomotricidad, kinesiología, nutrición y más. Escribinos si necesitás algo puntual.</p></details>
   </div>
 </div></section>
@@ -480,6 +570,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
     <a href="https://wa.me/5493515426971" target="_blank" rel="noopener">WhatsApp</a><span>·</span>
     <a href="mailto:emanuelluduena1@gmail.com">Email</a><span>·</span>
     <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo Mi Gestor</a><span>·</span>
+    <a href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo Mi Gestor Ferretería</a><span>·</span>
     <a href="salud/">Demo Mi Gestor Salud</a><span>·</span>
     <a href="terminos.html">Términos de uso</a>
   </div>
@@ -591,6 +682,10 @@ resetTimer();
     'fidelizacion-1': {
       tag: 'MÓDULO FIDELIZACIÓN',
       h1: 'Hacé que tus clientes <span class="accent">vuelvan</span>, no que se vayan con el que está más cerca.'
+    },
+    'ferreteria-1': {
+      tag: 'MI GESTOR FERRETERÍA · PARA FERRETERÍAS',
+      h1: 'Tus precios al día, <span class="accent">sin cargar producto por producto.</span>'
     },
     'salud-1': {
       tag: 'MI GESTOR SALUD · PARA CENTROS DE SALUD',
