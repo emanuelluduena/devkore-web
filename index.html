@@ -135,6 +135,18 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 .split-card.before .split-line{color:var(--mut)}
 .check{color:var(--green);font-weight:700}
 
+/* fondos que se difuminan (uno por producto) */
+.has-bg{position:relative;overflow:hidden}
+.has-bg>.wrap{position:relative;z-index:1}
+.bgfade{position:absolute;inset:0;z-index:0;pointer-events:none}
+.bgfade i{position:absolute;inset:-24px;background-size:cover;background-position:center;opacity:0;filter:blur(5px);transition:opacity 2.2s ease}
+.bgfade i.on{opacity:var(--bgo,.34)}
+.bgfade::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,var(--e1,#fff) 0,transparent 16%,transparent 84%,var(--e2,#fff) 100%)}
+#migestor{--e1:#fff;--e2:#fff}
+#ferreteria{--e1:var(--bg);--e2:var(--bg);--bgo:.3}
+#salud{--e1:var(--navy);--e2:var(--navy2);--bgo:.16}
+@media (prefers-reduced-motion: reduce){.bgfade i{transition:none}}
+
 /* ferretería */
 .ferre-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
 .ferre .feats{margin:6px 0 26px}
@@ -345,7 +357,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   </div>
 </div></section>
 
-<section id="migestor"><div class="wrap">
+<section class="has-bg" id="migestor"><div class="bgfade" data-bg="fondos/gestor-1.svg,fondos/gestor-2.svg,fondos/gestor-3.svg" aria-hidden="true"></div><div class="wrap">
   <span class="eyebrow">Mi Gestor · para comercios</span>
   <h2>Así se ve Mi Gestor por dentro</h2>
   <p class="lead">Funcionando de verdad. Probalo vos mismo, sin registrarte.</p>
@@ -414,7 +426,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   </div>
 </div></section>
 
-<section class="alt ferre" id="ferreteria"><div class="wrap ferre-grid">
+<section class="alt ferre has-bg" id="ferreteria"><div class="bgfade" data-bg="fondos/ferreteria-1.svg,fondos/ferreteria-2.svg,fondos/ferreteria-3.svg" aria-hidden="true"></div><div class="wrap ferre-grid">
   <div>
     <span class="eyebrow">Mi Gestor Ferretería · para ferreterías</span>
     <h2>Tus precios al día, sin cargar producto por producto</h2>
@@ -450,7 +462,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   </div>
 </div></section>
 
-<section class="salud" id="salud"><div class="wrap salud-grid">
+<section class="salud has-bg" id="salud"><div class="bgfade" data-bg="fondos/salud-1.svg,fondos/salud-2.svg,fondos/salud-3.svg" aria-hidden="true"></div><div class="wrap salud-grid">
   <div>
     <span class="eyebrow">Mi Gestor Salud · para centros de salud</span>
     <h2>Los turnos y las historias clínicas de tu centro, en un solo lugar</h2>
@@ -612,6 +624,28 @@ function resetTimer() {
   }
 }
 resetTimer();
+
+/* ---- fondos que cambian suavemente en cada producto ---- */
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.bgfade').forEach(function (box) {
+    const imgs = box.dataset.bg.split(',').map(function (u) {
+      const i = document.createElement('i');
+      i.style.backgroundImage = 'url(' + u + ')';
+      box.appendChild(i);
+      return i;
+    });
+    let k = 0, t = null;
+    imgs[0].classList.add('on');
+    if (reduce || imgs.length < 2) return;
+    function step() { imgs[k].classList.remove('on'); k = (k + 1) % imgs.length; imgs[k].classList.add('on'); }
+    function start() { if (!t) t = setInterval(step, 6000); }
+    function stop() { clearInterval(t); t = null; }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { es[0].isIntersecting ? start() : stop(); }, { threshold: 0.05 }).observe(box.parentElement);
+    } else { start(); }
+  });
+})();
 
 /* ---- demo de listas de precios conectadas (ejemplo ilustrativo) ---- */
 (function () {
