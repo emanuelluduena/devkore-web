@@ -135,6 +135,7 @@ const DEMO=DEMOS.includes(Q.get('demo'))?Q.get('demo'):'rehab';
 const KEY='msalud_'+DEMO+'_v2';
 const SKEY='msalud_me_'+DEMO;
 const CONTACTO_URL='https://wa.me/5493515426971?text=Hola%2C%20vi%20el%20demo%20de%20Mi%20Gestor%20Salud%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n';
+const USUARIO_URL='https://wa.me/5493515426971?text='+encodeURIComponent('Hola! Estuve probando la demo de Mi Gestor Salud y quiero seguir probando con mi propio usuario. ¿Me pasás un usuario y contraseña?');
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,10);
@@ -425,7 +426,7 @@ function render(){
    <div class="content"><div class="topbar"><button onclick="ui.nav=true;render()">☰</button><b>Mi Gestor Salud</b></div>
    ${bannerHtml()}<main>${views[ui.view]()}</main></div></div>`;
 }
-function bannerHtml(){return `<div class="demo"><span><b>Versión de demostración</b> — los datos que cargues se guardan solo en tu navegador. No ingreses datos reales de pacientes.</span><a class="btn s o" href="./">Otros demos</a><button class="btn s o" onclick="reiniciar()">Reiniciar demo</button><a class="btn s g" href="${CONTACTO_URL}" target="_blank" rel="noopener">Quiero esto en mi centro</a></div>`}
+function bannerHtml(){return `<div class="demo"><span><b>Versión de demostración</b> — los datos que cargues se guardan solo en tu navegador. No ingreses datos reales de pacientes.</span><a class="btn s o" href="./">Otros demos</a><button class="btn s o" onclick="reiniciar()">Reiniciar demo</button><a class="btn s g" href="${CONTACTO_URL}" target="_blank" rel="noopener">Quiero esto en mi centro</a><a class="btn s g" href="${USUARIO_URL}" target="_blank" rel="noopener">💬 Pedir usuario por WhatsApp</a></div>`}
 function reiniciar(){if(!confirm('Se borran los datos que cargaste en esta demo y vuelve a los datos de ejemplo. ¿Seguro?'))return;try{localStorage.removeItem(KEY);sessionStorage.removeItem(SKEY)}catch(e){}location.href=location.pathname+'?demo='+DEMO}
 function go(v,extra){ui.view=v;ui.nav=false;if(extra)Object.assign(ui,extra);render();window.scrollTo(0,0)}
 function openModal(h,wide){$('#mbox').className='box'+(wide?' wide':'');$('#mbox').innerHTML=h;$('#modal').classList.add('on')}
