@@ -21,7 +21,7 @@
   if(sessionStorage.getItem(k))return;
   sessionStorage.setItem(k,'1');
   var ref='';try{ref=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
-  fetch('https://yabschiaphpiozajnwxx.supabase.co/functions/v1/demo-salud-evento',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({demo:d,rol:q.get('rol')||'login',ref:ref}),keepalive:true}).catch(function(){});
+  fetch('https://yabschiaphpiozajnwxx.supabase.co/functions/v1/demo-salud-evento',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({demo:d,rol:(['admin','secretaria','profesional'].indexOf(q.get('rol'))<0?'admin':q.get('rol')),ref:ref}),keepalive:true}).catch(function(){});
 }catch(e){}})();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -350,7 +350,10 @@ const contacto=p=>(resps(p).find(r=>r.t)||{}).t||p.tel||'';
 let me=null;
 try{const id=sessionStorage.getItem(SKEY);me=S.users.find(u=>u.id===id)||null}catch(e){}
 (function entradaDirecta(){
-  const rol=Q.get('rol');if(!rol)return;
+  /* Entra directo, sin pedir usuario ni contraseña (igual que Mi Gestor): como Administrador,
+     o con el rol de ?rol=. Si ya hay una sesión abierta en esta pestaña, se mantiene. */
+  if(me&&!Q.get('rol'))return;
+  const rol=['admin','secretaria','profesional'].includes(Q.get('rol'))?Q.get('rol'):'admin';
   const u=S.users.find(x=>x.rol===rol&&x.activo!==false);
   if(u){me=u;try{sessionStorage.setItem(SKEY,u.id)}catch(e){}}
   history.replaceState(null,'','?demo='+DEMO);
@@ -433,7 +436,12 @@ function vLogin(){return `<div class="login"><h1>Mi Gestor <span>Salud</span></h
  <div class="card"><label>Usuario</label><input id="lu" autocomplete="off" onkeydown="if(event.key==='Enter')$('#lp').focus()">
  <label>Contraseña</label><input id="lp" type="password" onkeydown="if(event.key==='Enter')login()">
  <div class="acts"><button class="btn" style="width:100%" onclick="login()">Ingresar</button></div>
- <div class="hint"><b>${esc(S.centro)}</b> — usuarios de la demo:<br>${S.users.filter(u=>u.activo!==false).map(u=>`${esc(u.usuario)} / ${esc(u.pass)} <span>(${u.rol==='profesional'?esc(prof(u.profId)?.esp||'profesional'):(ROLES[u.rol]||u.rol)})</span>`).join('<br>')}<br><br><a href="./">← Elegir otro demo</a></div></div></div>`}
+ <div class="hint"><b>${esc(S.centro)}</b><br><br><button class="btn g" style="width:100%" onclick="entrarDemo()">Entrar a la demo</button><br><br><a href="./">← Elegir otro demo</a></div></div></div>`}
+function entrarDemo(){
+  const u=S.users.find(x=>x.rol==='admin'&&x.activo!==false)||S.users.find(x=>x.activo!==false);
+  if(!u)return;
+  me=u;sessionStorage.setItem(SKEY,u.id);ui.view='inicio';log('login');render();
+}
 function login(){
   const u=S.users.find(x=>x.activo!==false&&x.usuario===$('#lu').value.trim().toLowerCase()&&x.pass===$('#lp').value);
   if(!u){alert('Usuario o contraseña incorrectos');return}
