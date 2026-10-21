@@ -8,7 +8,15 @@
 <script>
 (function(){try{
   var q=new URLSearchParams(location.search),d=q.get('demo');
-  if(['rehab','psico','kine'].indexOf(d)<0)d='rehab';
+  var GR={rehab:['rehab','rehab2','rehab3','rehab4'],psico:['psico','psico2','psico3'],kine:['kine','kine2','kine3']};
+  var ALL=GR.rehab.concat(GR.psico,GR.kine);
+  if(ALL.indexOf(d)<0){
+    /* sin demo válido: elige uno al azar (del grupo pedido, o de los 10) y lo fija en la URL */
+    var pool=GR[q.get('grupo')]||ALL;
+    d=pool[Math.floor(Math.random()*pool.length)];
+    q.set('demo',d);q.delete('grupo');
+    try{history.replaceState(null,'','?'+q.toString())}catch(e){}
+  }
   var k='msalud_aviso_'+d;
   if(sessionStorage.getItem(k))return;
   sessionStorage.setItem(k,'1');
@@ -122,7 +130,7 @@ h4.sec{margin:18px 0 2px;font-size:13px;color:var(--navy);border-bottom:1px soli
 <script>
 /* ================= Utilidades ================= */
 const Q=new URLSearchParams(location.search);
-const DEMOS=['rehab','psico','kine'];
+const DEMOS=['rehab','rehab2','rehab3','rehab4','psico','psico2','psico3','kine','kine2','kine3'];
 const DEMO=DEMOS.includes(Q.get('demo'))?Q.get('demo'):'rehab';
 const KEY='msalud_'+DEMO+'_v2';
 const SKEY='msalud_me_'+DEMO;
@@ -190,7 +198,107 @@ const DEMO_CFG={
   hoy:[[4,1,600,45,'confirmado','Kinesiología respiratoria'],[1,1,660,45,'pendiente','Lumbalgia'],[3,2,540,45,'presente','Esguince de tobillo'],[7,2,660,45,'confirmado','Rehabilitación de hombro'],[6,3,570,30,'confirmado','Control nutricional'],[1,3,630,30,'pendiente','Plan alimentario'],[4,3,720,30,'pendiente','Control nutricional']],
   manana:[[2,2,600,45,'pendiente','Rehabilitación de rodilla'],[6,1,540,45,'confirmado','Cervicalgia'],[3,1,600,45,'pendiente','Esguince de tobillo']],
   pasado:[[7,1,-2,600,45,'ausente','Sesión'],[3,2,-3,540,45,'presente','Esguince de tobillo']],
-  evols:[[2,1,-7,'Sesión','Mejora en rango de movimiento de rodilla. Se progresa con ejercicios de fortalecimiento de cuádriceps.',true],[5,2,-4,'Evaluación','Evaluación funcional. Plan de readaptación en 6 semanas.',false],[6,3,-6,'Consulta','Plan alimentario inicial. Se acuerdan controles quincenales.',false]]}
+  evols:[[2,1,-7,'Sesión','Mejora en rango de movimiento de rodilla. Se progresa con ejercicios de fortalecimiento de cuádriceps.',true],[5,2,-4,'Evaluación','Evaluación funcional. Plan de readaptación en 6 semanas.',false],[6,3,-6,'Consulta','Plan alimentario inicial. Se acuerdan controles quincenales.',false]]},
+ rehab2:{centro:'Centro Despertar (demo)',
+  profs:[['Silvia','Montenegro','Psicología','MP 7101','#2563eb'],['Gonzalo','Arce','Fonoaudiología','MP 7102','#16a34a'],['Daniela','Quiroga','Psicopedagogía','MP 7103','#d97706']],
+  pacs:[
+   ['Barrionuevo','Emilia','51443322','2017-04-02','APROSS','310045',1,['Madre','Gisela','Barrionuevo','351 555-3101','gisela.b@example.com']],
+   ['Cáceres','Joaquín','50221133','2016-09-14','PROFE','228811/01',2,['Padre','Sergio','Cáceres','351 555-3102',''],['Madre','Andrea','Luna','351 555-3103','']],
+   ['Delgado','Renata','52667788','2019-06-27','OSDE','774411',0,['Madre','Julia','Delgado','351 555-3201','julia.delgado@example.com']],
+   ['Estévez','Lautaro','49110022','2014-01-19','Particular','',0,['Madre','Patricia','Estévez','351 555-3301','']],
+   ['Figueroa','Olivia','51889900','2018-11-08','Swiss Medical','90210',0,['Padre','Marcelo','Figueroa','351 555-3401','marcelo.f@example.com']],
+   ['Heredia','Santino','50334411','2016-02-23','PROFE','559900/03',1,['Madre','Verónica','Heredia','351 555-3501','']]],
+  serie:[[1,1,540,45,'Sesión semanal']],
+  hoy:[[2,1,600,45,'confirmado','Sesión'],[3,2,570,30,'pendiente','Evaluación del lenguaje'],[4,2,630,45,'confirmado','Terapia de lenguaje'],[5,3,540,45,'presente','Apoyo escolar'],[6,3,600,45,'pendiente','Evaluación psicopedagógica']],
+  manana:[[1,2,570,45,'pendiente','Terapia de lenguaje'],[4,1,600,45,'confirmado','Sesión'],[6,3,540,45,'pendiente','Apoyo escolar']],
+  pasado:[[3,1,-3,570,45,'ausente','Sesión'],[2,2,-2,600,30,'presente','Entrevista inicial']],
+  evols:[[1,1,-7,'Sesión','Trabajo de manejo de la frustración con juegos de reglas. Buena disposición. Se continúa con frecuencia semanal.',true],[5,3,-5,'Evaluación','Evaluación de lectoescritura inicial. (Nota privada del profesional.)',false],[2,2,-4,'Sesión','Ejercicios de praxias orofaciales y articulación de fonemas /r/ y /s/.',true]]},
+ rehab3:{centro:'Instituto Pequeños Pasos (demo)',
+  profs:[['Mariana','Toledo','Terapia ocupacional','MP 7201','#2563eb'],['Esteban','Villalba','Psicomotricidad','MP 7202','#16a34a'],['Florencia','Ponce','Fonoaudiología','MP 7203','#d97706'],['Ramiro','Salinas','Psicología','MP 7204','#9333ea']],
+  pacs:[
+   ['Juárez','Bautista','52998877','2019-08-15','APROSS','431100',1,['Madre','Carina','Juárez','351 555-4101','']],
+   ['Kramer','Isabella','51556677','2017-12-04','OSDE','660022',0,['Padre','Daniel','Kramer','351 555-4201','daniel.kramer@example.com']],
+   ['Luján','Facundo','50776655','2016-05-30','PROFE','381122/02',2,['Madre','Mónica','Luján','351 555-4301',''],['Padre','Ariel','Luján','351 555-4302','']],
+   ['Medina','Emma','53112200','2020-03-11','Swiss Medical','88442',0,['Madre','Soledad','Medina','351 555-4401','sole.medina@example.com']],
+   ['Núñez','Dante','49445566','2015-10-21','Particular','',0,['Padre','Gustavo','Núñez','351 555-4501','']],
+   ['Ocampo','Mía','52001122','2018-07-07','APROSS','119933',1,['Madre','Belén','Ocampo','351 555-4601','']],
+   ['Peralta','Gael','50889911','2016-11-26','PROFE','772200/01',0,['Madre','Claudia','Peralta','351 555-4701','']]],
+  serie:[[3,2,600,60,'Estimulación semanal']],
+  hoy:[[1,1,540,45,'confirmado','Terapia ocupacional'],[5,1,630,45,'pendiente','Terapia ocupacional'],[2,2,540,60,'presente','Sesión de psicomotricidad'],[6,3,570,30,'confirmado','Evaluación del lenguaje'],[7,3,630,45,'pendiente','Terapia de lenguaje'],[4,4,600,45,'pendiente','Primera consulta']],
+  manana:[[1,1,570,45,'pendiente','Terapia ocupacional'],[2,2,600,60,'confirmado','Estimulación'],[7,4,540,45,'pendiente','Sesión']],
+  pasado:[[6,3,-3,570,30,'ausente','Evaluación del lenguaje'],[4,4,-2,600,45,'presente','Entrevista inicial']],
+  evols:[[3,2,-7,'Sesión','Circuito motor con obstáculos. Mejora el equilibrio en un pie. Se comparte con el equipo.',true],[1,1,-5,'Sesión','Trabajo de integración sensorial y motricidad fina. Tolera texturas nuevas.',false],[4,4,-2,'Entrevista familiar','Entrevista con la madre. Motivo de consulta: demora en el inicio del lenguaje.',false]]},
+ rehab4:{centro:'Centro Aprender Jugando (demo)',
+  profs:[['Natalia','Cortés','Psicopedagogía','MP 7301','#2563eb'],['Hugo','Barrera','Psicología','MP 7302','#16a34a'],['Agustina','Roldán','Terapia ocupacional','MP 7303','#d97706']],
+  pacs:[
+   ['Quiroz','Ciro','51778899','2017-02-17','OSDE','204050',0,['Madre','Laura','Quiroz','351 555-5101','laura.quiroz@example.com']],
+   ['Rivas','Alma','50990011','2016-06-09','APROSS','338877',1,['Madre','Eugenia','Rivas','351 555-5201',''],['Padre','Pablo','Rivas','351 555-5202','']],
+   ['Sandoval','Tiziano','52445566','2018-10-02','PROFE','610099/01',0,['Padre','Walter','Sandoval','351 555-5301','']],
+   ['Trejo','Catalina','48990022','2013-04-24','Galeno','450067',0,['Madre','Lorena','Trejo','351 555-5401','lorena.trejo@example.com']],
+   ['Uriarte','Ramiro','51332244','2017-09-13','APROSS','902211',2,['Madre','Silvana','Uriarte','351 555-5501','']],
+   ['Vargas','Zoe','53667700','2020-01-05','Particular','',0,['Madre','Romina','Vargas','351 555-5601','']]],
+  serie:[[2,2,600,45,'Sesión semanal']],
+  hoy:[[1,1,540,45,'confirmado','Apoyo escolar'],[4,1,630,45,'pendiente','Orientación escolar'],[3,2,540,45,'presente','Sesión'],[5,3,570,45,'confirmado','Terapia ocupacional'],[6,3,630,45,'pendiente','Primera consulta']],
+  manana:[[1,1,540,45,'pendiente','Apoyo escolar'],[2,2,570,45,'confirmado','Sesión'],[5,3,600,45,'pendiente','Terapia ocupacional']],
+  pasado:[[4,1,-3,630,45,'ausente','Orientación escolar'],[3,2,-2,540,45,'presente','Entrevista inicial']],
+  evols:[[1,1,-6,'Sesión','Trabajo de comprensión lectora con textos cortos. Mejora en la atención sostenida.',true],[2,2,-4,'Sesión','Juego simbólico para trabajar la expresión de emociones. (Nota privada.)',false],[5,3,-5,'Evaluación','Evaluación de motricidad fina y grafismo. Plan de 8 semanas.',false]]},
+ psico2:{centro:'Consultorio Mente Sana (demo)',
+  profs:[['Lorena','Carrizo','Psicología clínica','MP 8101','#2563eb'],['Emiliano','Sarmiento','Psicología clínica','MP 8102','#16a34a'],['Julieta','Montoya','Psicología cognitivo-conductual','MP 8103','#d97706']],
+  pacs:[
+   ['Acuña','Marina','34778899','1989-03-08','OSDE','551122',0,[],[],'351 555-6101'],
+   ['Bravo','Esteban','31224455','1984-12-15','Swiss Medical','330099',0,[],[],'351 555-6102'],
+   ['Contreras','Daniela','37990011','1993-07-22','APROSS','884400',0,[],[],'351 555-6103'],
+   ['Duarte','Ignacio','29110022','1980-01-30','Particular','',0,[],[],'351 555-6104'],
+   ['Escobar','Valeria','40335577','1997-09-04','Galeno','226600',0,[],[],'351 555-6105'],
+   ['Frías','Mauricio','33556688','1987-05-19','OSDE','118800',0,[],[],'351 555-6106']],
+  serie:[[1,1,540,50,'Sesión individual'],[4,2,600,50,'Sesión individual']],
+  hoy:[[2,1,660,50,'confirmado','Sesión individual'],[3,1,720,50,'pendiente','Primera consulta'],[5,2,540,50,'presente','Sesión'],[6,2,720,50,'pendiente','Sesión'],[2,3,570,50,'confirmado','Terapia cognitivo-conductual'],[1,3,660,50,'pendiente','Sesión']],
+  manana:[[1,1,600,50,'pendiente','Sesión individual'],[5,2,540,50,'confirmado','Sesión'],[6,3,600,50,'pendiente','Sesión']],
+  pasado:[[3,1,-3,660,50,'ausente','Sesión individual'],[2,3,-2,570,50,'presente','Entrevista inicial']],
+  evols:[[1,1,-7,'Sesión','Revisión del registro de pensamientos. Se trabaja en técnicas de relajación para la semana.',false],[5,2,-4,'Sesión','Exploración de situaciones laborales de estrés. Se acuerda objetivo de corto plazo.',false],[2,3,-5,'Evaluación','Entrevista de admisión y aplicación de inventarios. Plan de 12 sesiones.',false]]},
+ psico3:{centro:'Espacio Terapéutico Alma (demo)',
+  profs:[['Cecilia','Ledesma','Terapia de pareja y familia','MP 8201','#2563eb'],['Matías','Ferrero','Psicología clínica','MP 8202','#16a34a'],['Brenda','Ojeda','Psicología infanto-juvenil','MP 8203','#d97706']],
+  pacs:[
+   ['Gallardo','Pablo','35889900','1991-02-14','OSDE','770011',0,[],[],'351 555-7101'],
+   ['Herrera','Lucía','36445566','1992-06-03','APROSS','662200',0,[],[],'351 555-7102'],
+   ['Ibáñez','Federico','32001144','1985-10-27','Swiss Medical','448800',0,[],[],'351 555-7103'],
+   ['Jaime','Abril','46223344','2012-08-18','PROFE','930011/01',0,['Madre','Gabriela','Jaime','351 555-7201','']],
+   ['Kuhn','Dylan','45889977','2011-11-29','OSDE','115577',0,['Padre','Nicolás','Kuhn','351 555-7301',''],['Madre','Sabrina','Kuhn','351 555-7302','sabrina.kuhn@example.com']],
+   ['Lescano','Rocío','38112200','1994-04-09','Particular','',0,[],[],'351 555-7104']],
+  serie:[[1,1,600,60,'Terapia de pareja'],[4,3,540,45,'Sesión infanto-juvenil']],
+  hoy:[[2,1,720,60,'confirmado','Terapia de pareja'],[3,2,540,50,'presente','Sesión individual'],[6,2,660,50,'pendiente','Primera consulta'],[5,3,600,45,'confirmado','Sesión infanto-juvenil'],[4,3,660,45,'pendiente','Seguimiento']],
+  manana:[[1,1,600,60,'pendiente','Terapia de pareja'],[3,2,540,50,'confirmado','Sesión individual'],[5,3,540,45,'pendiente','Sesión infanto-juvenil']],
+  pasado:[[6,2,-3,660,50,'ausente','Primera consulta'],[2,1,-2,720,60,'presente','Terapia de pareja']],
+  evols:[[1,1,-7,'Sesión','Trabajo sobre comunicación y acuerdos de convivencia. Tareas para el hogar entre sesiones.',false],[4,3,-4,'Sesión','Sesión con juego. Se acuerda entrevista de devolución con la madre.',true],[3,2,-5,'Sesión','Se aborda duelo reciente. Buena alianza terapéutica.',false]]},
+ kine2:{centro:'Kinesio Sur (demo)',
+  profs:[['Sergio','Bustos','Kinesiología','MP 9101','#2563eb'],['Camila','Rojas','Kinesiología deportiva','MP 9102','#16a34a'],['Tomás','Aguilar','Nutrición','MP 9103','#d97706']],
+  pacs:[
+   ['Alonso','Rubén','27334455','1970-09-12','PAMI','440011',0,[],[],'351 555-8101'],
+   ['Burgos','Natalia','36778800','1992-01-25','OSDE','229900',0,[],[],'351 555-8102'],
+   ['Correa','Julián','41001122','1998-05-16','Swiss Medical','551177',0,[],[],'351 555-8103'],
+   ['Díaz','Marta','24556677','1966-11-08','PAMI','338844',0,[],[],'351 555-8104'],
+   ['Espinosa','Franco','39223344','1995-03-03','APROSS','772211',0,[],[],'351 555-8105'],
+   ['Fontana','Silvia','31889900','1983-07-31','Galeno','660044',0,[],[],'351 555-8106']],
+  serie:[[1,1,540,45,'Rehabilitación de hombro'],[3,2,600,60,'Readaptación deportiva']],
+  hoy:[[4,1,600,45,'confirmado','Lumbalgia'],[2,1,660,45,'pendiente','Cervicalgia'],[5,2,540,45,'presente','Esguince de tobillo'],[6,3,570,30,'confirmado','Plan alimentario'],[2,3,630,30,'pendiente','Control nutricional']],
+  manana:[[1,1,540,45,'pendiente','Rehabilitación de hombro'],[3,2,600,60,'confirmado','Readaptación deportiva'],[4,3,570,30,'pendiente','Control nutricional']],
+  pasado:[[4,1,-3,600,45,'ausente','Lumbalgia'],[5,2,-2,540,45,'presente','Esguince de tobillo']],
+  evols:[[1,1,-7,'Sesión','Mejora el rango de movimiento del hombro. Se suman ejercicios con banda elástica.',true],[3,2,-4,'Evaluación','Evaluación funcional previa al regreso al entrenamiento. Plan de 6 semanas.',false],[6,3,-6,'Consulta','Plan alimentario inicial. Controles quincenales.',false]]},
+ kine3:{centro:'Centro Vital (demo)',
+  profs:[['Andrea','Maidana','Kinesiología','MP 9201','#2563eb'],['Leonel','Pereyra','Traumatología','MP 9202','#16a34a'],['Pilar','Zárate','Nutrición','MP 9203','#d97706']],
+  pacs:[
+   ['Gómez','Ricardo','26778899','1968-04-20','PAMI','110022',0,[],[],'351 555-9101'],
+   ['Herrero','Claudia','30445566','1980-08-14','OSDE','993300',0,[],[],'351 555-9102'],
+   ['Iglesias','Matías','38667788','1994-12-02','APROSS','447700',0,[],[],'351 555-9103'],
+   ['Jorge','Mabel','23001122','1962-06-18','PAMI','225566',0,[],[],'351 555-9104'],
+   ['Koch','Andrés','34990011','1989-02-27','Swiss Medical','884411',0,[],[],'351 555-9105'],
+   ['Lima','Sofía','42556600','1999-10-10','Particular','',0,[],[],'351 555-9106'],
+   ['Maurino','Hernán','29334411','1976-03-23','Galeno','551100',0,[],[],'351 555-9107']],
+  serie:[[1,1,600,45,'Rehabilitación de rodilla']],
+  hoy:[[2,1,540,45,'confirmado','Lumbalgia'],[3,1,660,45,'pendiente','Cervicalgia'],[5,2,570,30,'presente','Control postoperatorio'],[7,2,630,30,'confirmado','Consulta traumatológica'],[6,3,540,30,'confirmado','Plan alimentario'],[4,3,600,30,'pendiente','Control nutricional']],
+  manana:[[1,1,600,45,'pendiente','Rehabilitación de rodilla'],[2,1,540,45,'confirmado','Lumbalgia'],[5,2,570,30,'pendiente','Control postoperatorio']],
+  pasado:[[7,2,-3,630,30,'ausente','Consulta traumatológica'],[3,1,-2,660,45,'presente','Cervicalgia']],
+  evols:[[1,1,-7,'Sesión','Fortalecimiento de cuádriceps y control de la marcha. Evolución favorable.',true],[5,2,-4,'Consulta','Control postoperatorio de hombro. Se indica continuar con kinesiología.',true],[6,3,-6,'Consulta','Plan alimentario inicial y pautas de hidratación.',false]]}
 };
 function seed(){
   const C=DEMO_CFG[DEMO],hoy=ymd(new Date());
@@ -211,6 +319,8 @@ function seed(){
   const evols=C.evols.map(([pi,pr,off,tipo,texto,comp],i)=>({id:'e'+(i+1),pacId:'a'+pi,profId:'p'+pr,fecha:addDays(hoy,off),tipo,texto,comp,creado:Date.now()+off*864e5}));
   return {centro:C.centro,profs,users,pacientes,turnos,evols,docs:[],audit:[],mig3:1};
 }
+/* Reinicio automático cada 24 hs: si los datos de este demo tienen más de un día, vuelven a los de ejemplo */
+(function(){try{const tk='msalud_ts_'+DEMO,t=+localStorage.getItem(tk)||0;if(!t||Date.now()-t>864e5){localStorage.removeItem(KEY);localStorage.setItem(tk,String(Date.now()))}}catch(e){}})();
 let S=(()=>{try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}})()||seed();
 /* Migración: datos guardados con la versión anterior (campo único "tutor") */
 (function migrar(){
