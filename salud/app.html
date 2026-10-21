@@ -347,7 +347,7 @@ function exitFb(v){_exitSent=v;$('#exit-si').style.background=v==='si'?'var(--g,
  if(v==='no')$('#exit-no-box').style.display='block';else{$('#exit-no-box').style.display='none';avisarSalud('salud-demo-feedback-positivo','👍 Le gustó la demo');alert('¡Qué bueno! Gracias 🙌')}}
 function exitEnviar(){var t=($('#exit-txt').value||'').trim();avisarSalud('salud-demo-feedback-negativo',t||'(sin comentario)');closeModal();alert('Gracias, tu opinión nos ayuda a crecer 🙏')}
 function exitLogout(){if(!me)return;logout()}
-function salir(){if(me&&!_exitShown)exitOpen();else logout()}
+function salir(){if(me)exitOpen();else logout()}
 (function(){
  document.addEventListener('mouseout',function(e){if(me&&!_exitShown&&!e.relatedTarget&&e.clientY<=0)exitOpen()});
  var t=null;function rst(){clearTimeout(t);t=setTimeout(function(){if(me&&!_exitShown)exitOpen()},3*60*1000)}
