@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DevKore — Software de gestión para comercios, ferreterías y centros de salud</title>
-<meta name="description" content="Mi Gestor (punto de venta), Mi Gestor Ferretería (listas de precios y presupuestos), Mi Gestor Salud (turnos e historias clínicas), fidelización de clientes y páginas web a medida. Hecho en Córdoba, Argentina.">
+<title>DevKore — Software de gestión para comercios, gastronomía, ferreterías y centros de salud</title>
+<meta name="description" content="Mi Gestor (punto de venta), Mi Gestor Ferretería (listas de precios y presupuestos), Mi Gestor Salud (turnos e historias clínicas), Mi Gestor Gastronomía (mesas, comandas y pantalla de cocina), fidelización de clientes y páginas web a medida. Hecho en Córdoba, Argentina.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_AR">
-<meta property="og:title" content="DevKore — Software de gestión para comercios, ferreterías y centros de salud">
-<meta property="og:description" content="Mi Gestor, Mi Gestor Ferretería, Mi Gestor Salud, fidelización y páginas web. Soluciones a medida, sin vueltas. Córdoba, Argentina.">
+<meta property="og:title" content="DevKore — Software de gestión para comercios, gastronomía, ferreterías y centros de salud">
+<meta property="og:description" content="Mi Gestor, Mi Gestor Ferretería, Mi Gestor Salud, Mi Gestor Gastronomía, fidelización y páginas web. Soluciones a medida, sin vueltas. Córdoba, Argentina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -71,7 +71,6 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 /* productos */
 .prods{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
 .prods .prod{grid-column:span 2}
-.prods .prod:nth-child(n+4){grid-column:span 3}
 .prod{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;position:relative}
 .prod.featured{border-color:var(--green);box-shadow:0 8px 26px rgba(16,185,129,.14)}
 .prod .for{display:inline-block;align-self:flex-start;background:#e8f5ef;color:#065f46;border-radius:99px;font-size:11.5px;font-weight:700;padding:3px 10px;margin-bottom:12px}
@@ -192,8 +191,49 @@ h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-wei
 .demo-row small{display:block;color:var(--mut);font-size:12px;font-weight:400}
 .btn.s{padding:6px 11px;font-size:12.5px;border-radius:8px}
 
+
+/* gastronomía */
+.gastro{background:linear-gradient(160deg,#1a1410 0%,#3a2315 100%);color:#fff}
+.gastro h2{color:#fff}.gastro .lead{color:#e7d9cc}.gastro .eyebrow{color:#fbbf77}
+.gastro-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+.gastro .feat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14)}
+.gastro .feat span{color:#e7d9cc}
+.gastro .soon{color:#c9b8a6}
+.kmock{background:#14110e;border-radius:16px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.45);color:#fff}
+.kmock .mbar{display:flex;gap:6px;margin-bottom:10px}.kmock .mbar i{width:9px;height:9px;border-radius:50%;background:#3b332c}
+.kmock .khead{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#a8998a;margin-bottom:10px}
+.kmock .khead b{color:#fff;font-size:13px}
+.kmock .kcols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kmock .kcol>b{display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#a8998a;margin-bottom:6px}
+.kmock .kt{background:#221c17;border:1px solid #3b332c;border-left:4px solid #f59e0b;border-radius:8px;padding:7px 9px;margin-bottom:7px;font-size:12px}
+.kmock .kt.old{border-left-color:#ef4444}
+.kmock .kt.ok{border-left-color:#10b981}
+.kmock .kt small{display:block;color:#a8998a;font-size:10.5px;margin-top:2px}
+.kmock .kt em{font-style:normal;float:right;font-size:10.5px;color:#fbbf77;font-weight:700}
+.gastro .demos{background:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips span{background:#f1f5f9;color:var(--navy);border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600}
+.prod.gastro-card .for{background:#fff1e0;color:#9a4b05}
+
+/* aviso de novedad */
+.nv-ov{position:fixed;inset:0;background:rgba(11,32,56,.62);z-index:300;display:none;align-items:center;justify-content:center;padding:18px}
+.nv-ov.on{display:flex}
+.nv-box{position:relative;background:#fff;border-radius:18px;max-width:440px;width:100%;padding:30px 26px 24px;box-shadow:0 28px 70px rgba(0,0,0,.4);text-align:center;max-height:92vh;overflow:auto}
+.nv-x{position:absolute;top:10px;right:12px;width:34px;height:34px;border:0;border-radius:50%;background:#f1f5f9;color:var(--navy);font-size:20px;line-height:1;cursor:pointer}
+.nv-x:hover{background:#e2e8f0}
+.nv-box .pill{background:#d1fae5;color:#065f46}
+.nv-box h3{font-size:24px;line-height:1.2;color:var(--navy);margin:12px 0 8px}
+.nv-box p{color:var(--mut);font-size:15px;margin-bottom:18px}
+.nv-box .btn{display:block;margin-bottom:8px}
+.nv-list{text-align:left;margin:4px 0 14px}
+.nv-list a{display:flex;justify-content:space-between;align-items:center;gap:10px;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:8px}
+.nv-list a:hover{border-color:var(--green)}
+.nv-list b{display:block;color:var(--navy);font-size:14.5px}
+.nv-list small{color:var(--mut);font-size:12px}
+.nv-list .go{color:var(--green2);font-weight:700;font-size:13px;white-space:nowrap}
+
 /* precios */
-.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto}
+.pricing{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:860px;margin:0 auto}
 .price-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px 26px;text-align:center;display:flex;flex-direction:column}
 .price-box.main{border-color:var(--green);box-shadow:0 8px 26px rgba(16,185,129,.14)}
 .price-box .tagline{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--green2);font-weight:700;margin-bottom:12px;display:block}
@@ -223,19 +263,18 @@ footer .footer-links span{margin:0 9px;opacity:.4}
 
 @media(max-width:1000px){
   .prods{grid-template-columns:repeat(2,1fr)}
-  .prods .prod,.prods .prod:nth-child(n+4){grid-column:auto}
-  .prods .prod:last-child{grid-column:1/-1}
+  .prods .prod{grid-column:auto}
   .pricing{grid-template-columns:1fr;max-width:460px}
 }
 @media(max-width:860px){
   .top .l{display:none}
-  .hero .wrap,.salud-grid,.ferre-grid{grid-template-columns:1fr}
+  .hero .wrap,.salud-grid,.ferre-grid,.gastro-grid{grid-template-columns:1fr}
   .hero-stack{display:none}
   h1{font-size:33px}
   .sync{grid-template-columns:1fr}
   .bridge{flex-direction:row;justify-content:center}.bridge .arrow{transform:rotate(90deg)}
   .points,.split-grid,.pricing{grid-template-columns:1fr}
-  .mock,.lnote{display:none}
+  .mock,.lnote,.kmock{display:none}
 }
 @media(max-width:600px){
   .prods{grid-template-columns:1fr}
@@ -260,6 +299,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   <a class="l" href="#migestor">Mi Gestor</a>
   <a class="l" href="#ferreteria">Ferretería</a>
   <a class="l" href="#salud">Mi Gestor Salud</a>
+  <a class="l" href="#gastronomia">Gastronomía</a>
   <a class="l" href="#precios">Precios</a>
   <a class="btn g" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20las%20soluciones%20de%20DevKore" target="_blank" rel="noopener">Hablar por WhatsApp</a>
 </div></header>
@@ -268,16 +308,17 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   <div>
     <span class="pill tag">SOFTWARE Y WEB · HECHO EN CÓRDOBA</span>
     <h1>Soluciones a medida, <span class="accent">sin vueltas.</span></h1>
-    <p class="sub">Sistemas de gestión para comercios, ferreterías y centros de salud, fidelización de clientes y páginas web. Todo conectado y probado en un negocio real antes de llegar al tuyo.</p>
+    <p class="sub">Sistemas de gestión para comercios, gastronomía, ferreterías y centros de salud, fidelización de clientes y páginas web. Todo conectado y probado en un negocio real antes de llegar al tuyo.</p>
     <div class="cta-row">
       <a class="btn g big" href="#productos">Ver las soluciones</a>
       <a class="btn ow big" href="https://wa.me/5493515426971?text=Hola!%20Quiero%20conocer%20las%20soluciones%20de%20DevKore" target="_blank" rel="noopener">Hablar por WhatsApp</a>
     </div>
-    <span class="trust-note">Cancelás cuando quieras · <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Mi Gestor</a> · <a href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Ferretería</a> · <a href="https://salud.migestor.com.ar/">Demo de Mi Gestor Salud</a></span>
+    <span class="trust-note">Cancelás cuando quieras · <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Mi Gestor</a> · <a href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Ferretería</a> · <a href="https://salud.migestor.com.ar/">Demo de Mi Gestor Salud</a> · <a href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo de Gastronomía</a></span>
   </div>
   <div class="hero-stack" aria-hidden="false">
     <a class="hs" href="#migestor"><div class="ic">🛒</div><div><b>Mi Gestor</b><span>Punto de venta y gestión</span></div></a>
     <a class="hs" href="#ferreteria"><div class="ic">🔧</div><div><b>Mi Gestor Ferretería</b><span>Listas de precios y presupuestos</span></div><i class="nuevo" style="font-style:normal">Nuevo</i></a>
+    <a class="hs" href="#gastronomia"><div class="ic">🍽️</div><div><b>Mi Gestor Gastronomía</b><span>Mesas, comandas y pantalla de cocina</span></div><i class="nuevo" style="font-style:normal">Nuevo</i></a>
     <a class="hs" href="#salud"><div class="ic">🩺</div><div><b>Mi Gestor Salud</b><span>Turnos e historias clínicas</span></div><i class="nuevo" style="font-style:normal">Nuevo</i></a>
     <a class="hs" href="#productos"><div class="ic">⭐</div><div><b>Fidelización</b><span>Puntos y premios para clientes</span></div></a>
     <a class="hs" href="#productos"><div class="ic">🌐</div><div><b>Páginas web</b><span>A medida, conectadas a tu sistema</span></div></a>
@@ -286,7 +327,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
 
 <section id="productos"><div class="wrap">
   <span class="eyebrow">Qué hacemos</span>
-  <h2>Cinco soluciones, una sola forma de trabajar</h2>
+  <h2>Seis soluciones, una sola forma de trabajar</h2>
   <p class="lead">Se pueden usar por separado o trabajando juntas. Elegí la que necesita tu negocio.</p>
   <div class="prods">
     <article class="prod">
@@ -314,6 +355,15 @@ footer .footer-links span{margin:0 9px;opacity:.4}
       <p>Turnos de todos los profesionales e historias clínicas por profesional, en un solo lugar.</p>
       <ul><li>Agenda para todo el centro</li><li>Historia clínica por profesional</li><li>Estudios y documentos</li></ul>
       <div class="acts"><a class="btn g" href="https://salud.migestor.com.ar/">Probar el demo</a><a class="btn o" href="#salud">Conocer más</a></div>
+    </article>
+    <article class="prod featured gastro-card">
+      <span class="nuevo">Nuevo</span>
+      <span class="for">Para gastronomía</span>
+      <div class="ico">🍽️</div>
+      <h3>Mi Gestor Gastronomía</h3>
+      <p>Mesas, comandas y una pantalla de cocina para que el pedido llegue solo a quien lo prepara.</p>
+      <ul><li>Pantalla de cocina en tiempo real</li><li>Mesas, salón, mostrador y delivery</li><li>Costos y stock de insumos</li></ul>
+      <div class="acts"><a class="btn g" href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a><a class="btn o" href="#gastronomia">Conocer más</a></div>
     </article>
     <article class="prod">
       <span class="for">Para comercios y negocios</span>
@@ -506,11 +556,54 @@ footer .footer-links span{margin:0 9px;opacity:.4}
   </div>
 </div></section>
 
+<section class="gastro" id="gastronomia"><div class="wrap gastro-grid">
+  <div>
+    <span class="eyebrow">Mi Gestor Gastronomía · para restaurantes, bares y casas de comida</span>
+    <h2>Del salón a la cocina, sin gritos ni papelitos</h2>
+    <p class="lead" style="margin-bottom:22px">El mozo carga el pedido y le aparece al instante a quien cocina, en una pantalla pensada para la cocina. Vos ves las mesas, la caja y lo que te cuesta cada plato.</p>
+    <div class="feats">
+      <div class="feat"><b>👨‍🍳 Pantalla de cocina</b><span>Los pedidos llegan solos y se ordenan en “en preparación” y “listos”. Con aviso sonoro, opción de imprimir, historial y los minutos que lleva cada pedido.</span></div>
+      <div class="feat"><b>🪑 Mesas y comandas</b><span>Mapa de mesas con su estado, comandas por mesa, mostrador y delivery. Sin pedidos perdidos ni platos que se olvidan.</span></div>
+      <div class="feat"><b>💰 Cobro y caja</b><span>Cerrás la cuenta, cobrás por medio de pago y llevás la caja por turno, con el total del día.</span></div>
+      <div class="feat"><b>📦 Costos e insumos</b><span>Cargás insumos y proveedores y ves cuánto te cuesta cada plato, para saber si estás ganando.</span></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn g big" href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo gratis</a>
+      <a class="btn ow big" href="https://wa.me/5493515426971?text=Hola%2C%20vi%20Mi%20Gestor%20Gastronom%C3%ADa%20en%20la%20web%20de%20DevKore%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener">Quiero esto en mi local</a>
+    </div>
+    <p class="soon">Funciona en la compu, tablet o celular que ya tenés: una pantalla para la cocina y otra para el salón.</p>
+  </div>
+  <div>
+    <div class="kmock" aria-hidden="true">
+      <div class="mbar"><i></i><i></i><i></i></div>
+      <div class="khead"><b>Pantalla de cocina</b><span>Se actualiza sola</span></div>
+      <div class="kcols">
+        <div class="kcol"><b>En preparación</b>
+          <div class="kt old"><em>22 min</em>Mesa 4<small>2× Milanesa napolitana · 1× Ensalada mixta</small></div>
+          <div class="kt"><em>8 min</em>Mesa 7<small>1× Hamburguesa doble · 2× Papas fritas</small></div>
+          <div class="kt"><em>3 min</em>Delivery<small>3× Pizza muzzarella · Nota: sin aceitunas</small></div>
+        </div>
+        <div class="kcol"><b>Listos para servir</b>
+          <div class="kt ok"><em>Listo</em>Mesa 2<small>2× Ravioles con salsa</small></div>
+          <div class="kt ok"><em>Listo</em>Mostrador<small>1× Lomito completo</small></div>
+        </div>
+      </div>
+    </div>
+    <p class="sync-note lnote" style="text-align:center;color:#c9b8a6">Ejemplo ilustrativo de la pantalla de cocina.</p>
+    <div class="demos">
+      <h3>Elegí un tipo de local y entrá</h3>
+      <div class="demo-row"><div><b>Demo de Mi Gestor Gastronomía</b><small>Te toca un local de ejemplo al azar. Entrás sin registrarte y no cargues datos reales.</small></div>
+        <a class="btn s g" href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a></div>
+      <div class="chips"><span>Pizzería</span><span>Parrilla</span><span>Hamburguesería</span><span>Café</span><span>Sushi</span><span>Empanadas</span><span>Pastas</span><span>Cervecería</span><span>Rotisería</span><span>Sandwichería</span></div>
+    </div>
+  </div>
+</div></section>
+
 <section class="alt" id="precios"><div class="wrap">
   <div class="center">
     <span class="eyebrow">Precios</span>
     <h2>Claro y sin letra chica</h2>
-    <p class="lead">Mi Gestor y Mi Gestor Ferretería con un solo precio, todo incluido. Salud, fidelización y páginas web se presupuestan según tu negocio.</p>
+    <p class="lead">Mi Gestor y Mi Gestor Ferretería con un solo precio, todo incluido. Gastronomía, Salud, fidelización y páginas web se presupuestan según tu negocio.</p>
   </div>
   <div class="pricing">
     <div class="price-box main">
@@ -542,6 +635,19 @@ footer .footer-links span{margin:0 9px;opacity:.4}
       <p style="margin-top:12px;color:var(--mut);font-size:13px">¿La querés en tu ferretería? <a href="https://wa.me/5493515426971?text=Hola%2C%20vi%20Mi%20Gestor%20Ferreter%C3%ADa%20en%20la%20web%20de%20DevKore%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener" style="color:var(--green2);font-weight:600">Escribinos por WhatsApp</a></p>
     </div>
     <div class="price-box">
+      <span class="tagline">MI GESTOR GASTRONOMÍA</span>
+      <span class="amount txt">Probalo gratis</span>
+      <span class="per">demo disponible ahora, sin registrarte</span>
+      <div class="price-list">
+        <div class="split-line"><span class="check">✓</span> Pantalla de cocina en tiempo real</div>
+        <div class="split-line"><span class="check">✓</span> Mesas, mostrador y delivery</div>
+        <div class="split-line"><span class="check">✓</span> Caja por turno y cobro por medio de pago</div>
+        <div class="split-line"><span class="check">✓</span> Insumos, proveedores y costo por plato</div>
+      </div>
+      <a class="btn n" href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a>
+      <p style="margin-top:12px;color:var(--mut);font-size:13px">¿Lo querés en tu local? <a href="https://wa.me/5493515426971?text=Hola%2C%20vi%20Mi%20Gestor%20Gastronom%C3%ADa%20en%20la%20web%20de%20DevKore%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener" style="color:var(--green2);font-weight:600">Escribinos por WhatsApp</a></p>
+    </div>
+    <div class="price-box">
       <span class="tagline">MI GESTOR SALUD</span>
       <span class="amount txt">Probalo gratis</span>
       <span class="per">demo disponible ahora, sin registrarte</span>
@@ -561,13 +667,15 @@ footer .footer-links span{margin:0 9px;opacity:.4}
 <section id="faq"><div class="wrap">
   <div class="center"><span class="eyebrow">Preguntas frecuentes</span><h2>Lo que suelen preguntar</h2></div>
   <div class="faq" style="margin-top:28px">
-    <details><summary>¿Puedo contratar solo una de las soluciones?</summary><p>Sí. Mi Gestor, Mi Gestor Ferretería, Mi Gestor Salud, la fidelización y la página web se pueden usar por separado. Juntas se potencian: por ejemplo, tu web toma los precios de tu sistema.</p></details>
+    <details><summary>¿Puedo contratar solo una de las soluciones?</summary><p>Sí. Mi Gestor, Mi Gestor Ferretería, Mi Gestor Gastronomía, Mi Gestor Salud, la fidelización y la página web se pueden usar por separado. Juntas se potencian: por ejemplo, tu web toma los precios de tu sistema.</p></details>
     <details><summary>¿Necesito instalar algo especial?</summary><p>No. Funcionan en la computadora, tablet o celular que ya tenés, desde el navegador.</p></details>
     <details><summary>¿Y si se corta el internet?</summary><p>Mi Gestor sigue vendiendo igual: guarda todo y sincroniza solo apenas vuelve la conexión.</p></details>
-    <details><summary>¿Puedo probarlo antes de decidir?</summary><p>Sí. Podés explorar la demo de Mi Gestor, la de Mi Gestor Ferretería y la de Mi Gestor Salud cuando quieras, sin registrarte. Además, Mi Gestor tiene 15 días de prueba gratis. Escribinos por WhatsApp si querés que te acompañemos.</p></details>
+    <details><summary>¿Puedo probarlo antes de decidir?</summary><p>Sí. Podés explorar la demo de Mi Gestor, la de Mi Gestor Ferretería, la de Mi Gestor Gastronomía y la de Mi Gestor Salud cuando quieras, sin registrarte. Además, Mi Gestor tiene 15 días de prueba gratis. Escribinos por WhatsApp si querés que te acompañemos.</p></details>
     <details><summary>¿Puedo cargar datos reales de pacientes en el demo de Salud?</summary><p>No. Los datos del demo se guardan solo en tu navegador y no deben incluir información real. En la versión para centros cada profesional tiene su usuario y los datos se guardan en la nube.</p></details>
     <details><summary>¿Cómo actualizo los precios de mi ferretería cuando sube un proveedor?</summary><p>Cargás la lista del proveedor (Excel, CSV o PDF), el sistema reconoce tus artículos y te muestra qué sube, qué baja y qué es nuevo. Revisás, aplicás, y si algo sale mal lo deshacés desde el historial. También podés aplicar un porcentaje a todos los artículos que filtres.</p></details>
     <details><summary>¿Puedo cargar datos reales en el demo de Ferretería?</summary><p>No. El demo es para explorar con datos de ejemplo y se puede reiniciar, así que no cargues información real de tu negocio.</p></details>
+    <details><summary>¿Cómo ve la cocina los pedidos en Mi Gestor Gastronomía?</summary><p>Tiene una pantalla de cocina: cuando el mozo envía la comanda, el pedido aparece al instante, con la mesa, los platos, las notas y los minutos que lleva. Cocina lo marca como listo y el salón se entera. Se puede usar en una tablet, una compu o una tele, y tiene aviso sonoro y opción de imprimir.</p></details>
+    <details><summary>¿Puedo cargar datos reales en el demo de Gastronomía?</summary><p>No. El demo te asigna un local de ejemplo y se reinicia solo todos los días, así que no cargues información real de tu negocio.</p></details>
     <details><summary>¿Mi Gestor Salud sirve para mi tipo de centro?</summary><p>Está pensado para centros chicos y multidisciplinarios: psicología, fonoaudiología, psicomotricidad, kinesiología, nutrición y más. Escribinos si necesitás algo puntual.</p></details>
   </div>
 </div></section>
@@ -585,10 +693,35 @@ footer .footer-links span{margin:0 9px;opacity:.4}
     <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo Mi Gestor</a><span>·</span>
     <a href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo Mi Gestor Ferretería</a><span>·</span>
     <a href="https://salud.migestor.com.ar/">Demo Mi Gestor Salud</a><span>·</span>
+    <a href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Demo Mi Gestor Gastronomía</a><span>·</span>
     <a href="terminos.html">Términos de uso</a>
   </div>
   © 2026 DevKore — www.devkore.com.ar · Córdoba, Argentina
 </div></footer>
+
+<div class="nv-ov" id="nv1" role="dialog" aria-modal="true" aria-labelledby="nv1t">
+  <div class="nv-box">
+    <button class="nv-x" type="button" data-nv="close1" aria-label="Cerrar">×</button>
+    <span class="pill">NUEVO</span>
+    <h3 id="nv1t">🍽️ Nuevo software de gastronomía</h3>
+    <p>Mesas, comandas y una <b>pantalla de cocina</b> para que el pedido llegue solo a quien lo prepara. Probalo ahora con un local de ejemplo, sin registrarte.</p>
+    <a class="btn g big" href="https://gastronomia.migestor.com.ar/?demo=1" target="_blank" rel="noopener" data-nv="try">Probar el demo</a>
+    <a class="btn o" href="#gastronomia" data-nv="more">Conocer más</a>
+  </div>
+</div>
+<div class="nv-ov" id="nv2" role="dialog" aria-modal="true" aria-labelledby="nv2t">
+  <div class="nv-box">
+    <button class="nv-x" type="button" data-nv="close2" aria-label="Cerrar">×</button>
+    <h3 id="nv2t">Mirá lo que podés probar</h3>
+    <p>Estas otras soluciones también tienen demo gratis, sin registrarte y con datos de ejemplo.</p>
+    <div class="nv-list">
+      <a href="https://www.migestor.com.ar/?demo=1" target="_blank" rel="noopener"><div><b>🛒 Mi Gestor</b><small>Punto de venta y gestión</small></div><span class="go">Probar →</span></a>
+      <a href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener"><div><b>🔧 Mi Gestor Ferretería</b><small>Listas de precios y presupuestos</small></div><span class="go">Probar →</span></a>
+      <a href="https://salud.migestor.com.ar/" target="_blank" rel="noopener"><div><b>🩺 Mi Gestor Salud</b><small>Turnos e historias clínicas</small></div><span class="go">Probar →</span></a>
+    </div>
+    <a class="btn o" href="#productos" data-nv="all">Ver todas las soluciones</a>
+  </div>
+</div>
 
 <script>
 /* ---- carrusel ---- */
@@ -722,6 +855,10 @@ resetTimer();
       tag: 'MI GESTOR FERRETERÍA · PARA FERRETERÍAS',
       h1: 'Tus precios al día, <span class="accent">sin cargar producto por producto.</span>'
     },
+    'gastronomia-1': {
+      tag: 'MI GESTOR GASTRONOMÍA · PARA RESTAURANTES Y BARES',
+      h1: 'Que el pedido llegue a la cocina <span class="accent">sin gritos ni papelitos.</span>'
+    },
     'salud-1': {
       tag: 'MI GESTOR SALUD · PARA CENTROS DE SALUD',
       h1: 'Los turnos y las historias clínicas de tu centro, <span class="accent">en un solo lugar.</span>'
@@ -736,6 +873,36 @@ resetTimer();
   const tagEl = document.querySelector('.hero .tag');
   if (h1El) h1El.innerHTML = m.h1;
   if (tagEl) tagEl.textContent = m.tag;
+})();
+/* ---- aviso de novedad: gastronomía; al cerrarlo con la X, muestra las otras demos ---- */
+(function () {
+  var o1 = document.getElementById('nv1'), o2 = document.getElementById('nv2');
+  if (!o1 || !o2) return;
+  var KEY = 'dk_nv_gastro', seen = false;
+  try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+  function hide(o) { o.classList.remove('on'); }
+  function show(o) { o.classList.add('on'); }
+  function mark() { try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
+  function closeAll() { hide(o1); hide(o2); }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('[data-nv]') : null;
+    if (t) {
+      var a = t.getAttribute('data-nv');
+      mark();
+      if (a === 'close1') { hide(o1); show(o2); }
+      else if (a === 'close2') { hide(o2); }
+      else { closeAll(); }
+      return;
+    }
+    if (e.target === o1) { hide(o1); show(o2); }
+    else if (e.target === o2) { hide(o2); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (o1.classList.contains('on')) { hide(o1); show(o2); mark(); }
+    else if (o2.classList.contains('on')) { hide(o2); }
+  });
+  if (!seen) setTimeout(function () { show(o1); }, 2500);
 })();
 </script>
 
