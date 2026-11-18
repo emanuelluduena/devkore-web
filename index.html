@@ -17,7 +17,7 @@
 :root{
   --navy:#0f2a4a; --navy2:#17406e; --navy3:#0b2038;
   --green:#10b981; --green2:#059669; --mint:#6ee7b7;
-  --bg:#f3f6fa; --card:#fff; --line:#e2e8f0; --txt:#1e293b; --mut:#64748b;
+  --bg:#e8eff7; --bgmint:#e3f5ee; --card:#fff; --line:#e2e8f0; --txt:#1e293b; --mut:#64748b;
 }
 html{scroll-behavior:smooth;scroll-padding-top:78px}
 body{background:#fff;color:var(--txt);font-family:'Inter',system-ui,sans-serif;line-height:1.6}
@@ -62,7 +62,10 @@ h1 .accent{color:var(--green)}
 
 /* secciones */
 section{padding:68px 0}
-section.alt{background:var(--bg)}
+section.alt{background:var(--bg);border-top:1px solid #d3dde9;border-bottom:1px solid #d3dde9}
+#conectado{background:var(--bgmint);border-top-color:#c9e8dc;border-bottom-color:#c9e8dc}
+section#faq{background:#fff}
+#precios{border-top:0}
 .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green2);font-weight:700;margin-bottom:8px;display:block}
 h2{font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.01em;font-weight:800;color:var(--navy)}
 .lead{color:var(--mut);margin:0 0 34px;font-size:17px;max-width:660px}
@@ -615,7 +618,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
         <div class="split-line"><span class="check">✓</span> Caja, gastos y proveedores</div>
         <div class="split-line"><span class="check">✓</span> Funciona sin internet</div>
         <div class="split-line"><span class="check">✓</span> Soporte por WhatsApp</div>
-        <div class="split-line"><span class="check">✓</span> ¿Más de un local? +$20.000/mes por cada local adicional</div>
+        <div class="split-line"><span class="check">✓</span> ¿Más de un local? <b><span class="desc-pct">30</span>% de descuento</b> en cada local adicional: <b>$<span class="desc-precio">35.000</span>/mes</b></div>
       </div>
       <a class="btn g" href="registro.html">Empezar prueba gratis</a>
       <p style="margin-top:12px;color:var(--mut);font-size:13px">Pagando anual: $40.000/mes ($480.000/año)</p>
@@ -629,7 +632,7 @@ footer .footer-links span{margin:0 9px;opacity:.4}
         <div class="split-line"><span class="check">✓</span> Ajuste masivo de precios, con deshacer</div>
         <div class="split-line"><span class="check">✓</span> Presupuestos y 3 listas de precios</div>
         <div class="split-line"><span class="check">✓</span> Cuentas corrientes, caja y stock</div>
-        <div class="split-line"><span class="check">✓</span> ¿Más de un local? +$30.000/mes por cada local adicional</div>
+        <div class="split-line"><span class="check">✓</span> ¿Más de un local? <b><span class="desc-pct">30</span>% de descuento</b> en cada local adicional: <b>$<span class="desc-precio">35.000</span>/mes</b></div>
       </div>
       <a class="btn n" href="https://ferreteria.migestor.com.ar/?demo=1" target="_blank" rel="noopener">Probar el demo</a>
       <p style="margin-top:12px;color:var(--mut);font-size:13px">¿La querés en tu ferretería? <a href="https://wa.me/5493515426971?text=Hola%2C%20vi%20Mi%20Gestor%20Ferreter%C3%ADa%20en%20la%20web%20de%20DevKore%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" rel="noopener" style="color:var(--green2);font-weight:600">Escribinos por WhatsApp</a></p>
@@ -919,6 +922,16 @@ resetTimer();
       + '&ref=' + encodeURIComponent(ref);
     new Image().src = url;
   } catch (e) {}
+})();
+</script>
+<script>
+/* Descuento por local adicional: cambiá solo estos dos valores */
+(function(){
+  const PRECIO_BASE = 50000;   // precio del primer local
+  const DESCUENTO   = 30;      // % de descuento en cada local adicional
+  const precio = Math.round(PRECIO_BASE * (1 - DESCUENTO / 100));
+  document.querySelectorAll('.desc-pct').forEach(e => e.textContent = DESCUENTO);
+  document.querySelectorAll('.desc-precio').forEach(e => e.textContent = precio.toLocaleString('es-AR'));
 })();
 </script>
 </body>
